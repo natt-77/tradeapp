@@ -2290,28 +2290,37 @@ SL: ${dom.summary.sl.textContent}
     }
 
     function populateCoinSelect() {
-        dom.coinSelect.innerHTML = '<option value="">เลือกเหรียญ...</option>';
-        state.coinsData.forEach(c => {
-            const option = new Option(`<span class="math-inline">\{c\.name\} \(</span>{c.symbol.toUpperCase()})`, c.id);
-            option.dataset.symbol = c.symbol.toLowerCase();
-            dom.coinSelect.add(option);
-        });
-        if (state.coinsData.length > 0) {
-            dom.coinSelect.value = state.coinsData[0].id;
-            handleCoinSelection(state.coinsData[0].id);
-        }
-        populateAlertCoinSelect();
+    dom.coinSelect.innerHTML = '<option value="">เลือกเหรียญ...</option>';
+    state.coinsData.forEach(c => {
+        // FIX: Create option element manually to render HTML
+        const option = document.createElement('option');
+        option.value = c.id;
+        option.dataset.symbol = c.symbol.toLowerCase();
+        option.innerHTML = `<span class="math-inline">\{c\.name\} \(</span>{c.symbol.toUpperCase()})`; // Use innerHTML
+        dom.coinSelect.add(option);
+    });
+    if (state.coinsData.length > 0) {
+        dom.coinSelect.value = state.coinsData[0].id;
+        handleCoinSelection(state.coinsData[0].id);
     }
+    populateAlertCoinSelect();
+}
 
-    function populateAlertCoinSelect() {
-        dom.alertCoinSelect.innerHTML = '<option value="">เลือกเหรียญ...</option>';
-        state.coinsData.forEach(c => {
-            const option = new Option(`<span class="math-inline">\{c\.name\} \(</span>{c.symbol.toUpperCase()})`, c.id);
-            option.dataset.symbol = c.symbol.toLowerCase();
-            dom.alertCoinSelect.add(option);
-        });
+function populateAlertCoinSelect() {
+    dom.alertCoinSelect.innerHTML = '<option value="">เลือกเหรียญ...</option>';
+    state.coinsData.forEach(c => {
+        // FIX: Create option element manually to render HTML
+        const option = document.createElement('option');
+        option.value = c.id;
+        option.dataset.symbol = c.symbol.toLowerCase();
+        option.innerHTML = `<span class="math-inline">\{c\.name\} \(</span>{c.symbol.toUpperCase()})`; // Use innerHTML
+        dom.alertCoinSelect.add(option);
+    });
+    // Sync with the main selection
+    if (dom.coinSelect.value) {
         dom.alertCoinSelect.value = dom.coinSelect.value;
     }
+}
 
    function handleCoinSelection(coinId, useSmartPrice = true) {
         if (!coinId) return;
