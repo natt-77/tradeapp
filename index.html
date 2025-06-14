@@ -1156,7 +1156,7 @@
             });
             alert(`Stop Loss ของ ${trade.coin.symbol.toUpperCase()} ถูกเลื่อนไปที่ราคาเท่าทุนแล้ว (${getPricePrecision(finalSLPrice)})`);
             // Re-render active trades to show updated SL
-            renderActiveTradesUI();
+            //renderActiveTradesUI();
         } catch (e) {
             console.error("Failed to move SL to Break-even:", e);
             alert("เกิดข้อผิดพลาดในการเลื่อน SL ไปกันทุน: " + e.message);
