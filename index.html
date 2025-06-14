@@ -1834,8 +1834,7 @@ SL: ${dom.summary.sl.textContent}
 
             el.innerHTML = `
                 <div class="flex items-center gap-3 flex-grow">
-                    <img src="${coin.iconUrl}" alt="${coin.name}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='${coin.image}'">
-                    <div>
+<img src="<span class="math-inline">\{coin\.iconUrl \|\| coin\.image \|\| ''\}" alt\="</span>{coin.name || coin.symbol || 'Coin'}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='https://via.placeholder.com/32/3a3a3c/ffffff?text=' + (coin.symbol ? coin.symbol.substring(0,2).toUpperCase() : 'CO')">                    <div>
                         <p class="font-bold text-sm">${coin.symbol?.toUpperCase()}</p>
                         <p class="text-xs ${trade.direction === 'long' ? 'text-profit' : 'text-loss'} font-semibold">${trade.direction.toUpperCase()}</p>
                     </div>
@@ -1872,8 +1871,7 @@ SL: ${dom.summary.sl.textContent}
             const coin = trade.coin || {};
             el.innerHTML = `
                 <div class="flex items-center gap-3">
-                    <img src="${coin.iconUrl}" alt="${coin.name}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='${coin.image}'">
-                    <div>
+<img src="${coin.iconUrl || coin.image || ''}" alt="${coin.name || coin.symbol || 'Coin'}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='https://via.placeholder.com/32/3a3a3c/ffffff?text=' + (coin.symbol ? coin.symbol.substring(0,2).toUpperCase() : 'CO')">                    <div>
                         <p class="font-bold text-sm">${coin.name || 'N/A'} <span class="text-xs text-gray-400 font-normal">${coin.symbol?.toUpperCase()}</span>${systemBadge}</p>
                         <p class="text-xs text-gray-400">${timestamp.toLocaleString('th-TH')}</p>
                     </div>
@@ -2269,9 +2267,10 @@ SL: ${dom.summary.sl.textContent}
             const plElement = document.getElementById(`realtime-pl-${tradeId}`);
             if (!plElement) continue;
 
-        // เพิ่มการตรวจสอบเพื่อป้องกันการหารด้วยศูนย์หรือผลลัพธ์ NaN หาก initialMgn, entry, หรือ leverage เป็น 0
-        // P/L ควรเป็น 0 หากการเทรดถูกตั้งค่าด้วย initial margin, entry price, หรือ leverage ที่เป็น 0
-        if (trade.initialMgn === 0 || trade.entry === 0 || trade.lev === 0) {
+       // เพิ่มการตรวจสอบเพื่อป้องกันการหารด้วยศูนย์หรือผลลัพธ์ NaN หาก initialMgn, entry, หรือ leverage เป็น 0
+        // P/L ควรเป็น 0 หากการเทรดถูกตั้งค่าด้วย initial margin, entry price, leverage เป็น 0 หรือ NaN
+        if (isNaN(trade.initialMgn) || isNaN(trade.entry) || isNaN(trade.lev) ||
+            trade.initialMgn === 0 || trade.entry === 0 || trade.lev === 0) {
             let finalPnl = 0;
             plElement.textContent = formatCurrency(finalPnl, true);
             plElement.classList.toggle('text-profit', finalPnl >= 0);
