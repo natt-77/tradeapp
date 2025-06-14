@@ -1,0 +1,2790 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Trade App - V4.25.1</title> <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        :root {
+            --slider-track-color: #3a3a3c;
+            --slider-thumb-color: #f2f2f7;
+            --brand-blue: #0A84FF;
+            --profit-color: #30D158;
+            --loss-color: #FF453A;
+            --caution-color: #FFD60A;
+            --tooltip-bg: rgba(10, 132, 255, 0.9);
+            --info-tooltip-bg: rgba(44, 44, 46, 0.95);
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #1C1C1E; color: #fff; }
+        .card {
+            background-color: rgba(28, 28, 30, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+        }
+        .form-input, .form-select {
+            background-color: rgba(44, 44, 46, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #fff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--brand-blue);
+            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3);
+        }
+        .form-input[readonly] {
+            background-color: rgba(36, 36, 38, 0.8);
+            color: rgba(235, 235, 245, 0.6);
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            background: var(--slider-track-color);
+            border-radius: 5px;
+            outline: none;
+            transition: opacity .2s;
+        }
+        .slider:disabled { opacity: 0.7; }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--slider-thumb-color);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .slider:disabled::-webkit-slider-thumb { cursor: not-allowed; background-color: #8e8e93; }
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: var(--slider-thumb-color);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .slider::-webkit-slider-thumb:hover, .slider:focus::-webkit-slider-thumb {
+            box-shadow: 0 0 0 6px rgba(10, 132, 255, 0.4);
+        }
+        .slider:focus::-moz-range-thumb {
+            box-shadow: 0 0 0 6px rgba(10, 132, 255, 0.6);
+        }
+
+        .btn { border-radius: 10px; font-weight: 600; transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: scale(1); }
+        .btn-primary {
+            background-color: var(--brand-blue);
+            color: white;
+            padding: 12px 20px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 3px 8px rgba(0,0,0,0.3);
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(0,0,0,0.05));
+        }
+        .btn-primary:not(:disabled):hover {
+            background-color: #007aff;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 5px 12px rgba(0,0,0,0.4);
+        }
+        .btn-secondary {
+            background-color: rgba(44, 44, 46, 0.8);
+            color: var(--brand-blue);
+            font-weight: 500;
+            padding: 8px 16px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+        }
+        .btn-secondary:not(:disabled):hover {
+            background-color: rgba(58, 58, 60, 0.9);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-secondary.active { background-color: var(--brand-blue); color: #FFF; background-image: linear-gradient(to right, #0A84FF, #0056b3); }
+        .preset-slot .saved-dot { width: 6px; height: 6px; background-color: var(--brand-blue); border-radius: 50%; position: absolute; top: 6px; right: 6px; display: none; }
+        .preset-slot.has-data .saved-dot { display: block; }
+
+        .tab-btn { padding: 8px 16px; color: rgba(255, 255, 255, 0.6); cursor: pointer; transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease; border-bottom: 2px solid transparent; }
+        .tab-btn.active {
+            color: #FFF;
+            font-weight: 600;
+            border-bottom-color: transparent;
+            background-image: linear-gradient(to right, #0A84FF, #0056b3);
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .direction-btn {
+            background-color: rgba(44, 44, 46, 0.8);
+            color: #FFF;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+        }
+        .direction-btn.active[data-direction="long"] {
+            background-color: var(--profit-color);
+            background-image: linear-gradient(to right, #30D158, #229940);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 3px 8px rgba(0,0,0,0.3);
+        }
+        .direction-btn.active[data-direction="short"] {
+            background-color: var(--loss-color);
+            background-image: linear-gradient(to right, #FF453A, #C70020);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 3px 8px rgba(0,0,0,0.3);
+        }
+        .btn-caution-glow {
+            box-shadow: inset 0 0 0 1px var(--caution-color), 0 0 8px rgba(255, 214, 10, 0.5);
+        }
+
+        .copyable-row { cursor: pointer; padding: 4px 8px; margin: -4px -8px; border-radius: 8px; transition: background-color 0.2s ease; display: flex; justify-content: space-between; align-items: center; }
+        .copyable-row:hover { background-color: rgba(255, 255, 255, 0.08); }
+
+        #copyTooltip, #infoTooltip {
+            position: fixed; color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 14px; z-index: 1000;
+            opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none;
+            transform: translate(-50%, -120%); text-align: center; max-width: 300px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
+        }
+        #copyTooltip { background-color: var(--tooltip-bg); }
+        #infoTooltip { background-color: var(--info-tooltip-bg); text-align: left; font-size: 13px; line-height: 1.4; padding: 10px 15px; }
+        #copyTooltip.show, #infoTooltip.show { opacity: 1; pointer-events: auto; }
+        #infoTooltip ul { list-style-type: disc; padding-left: 20px; margin-top: 5px; }
+        #infoTooltip ul li { margin-bottom: 2px; }
+
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .value-pop { animation: valuePop 0.3s ease-out; }
+        @keyframes valuePop { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+
+        .text-profit { color: var(--profit-color); }
+        .text-loss { color: var(--loss-color); }
+        .text-caution { color: var(--caution-color); }
+        .text-brand-blue { color: var(--brand-blue); }
+
+        .editable-value { cursor: pointer; padding: 2px 6px; border-radius: 6px; transition: background-color 0.2s ease, color 0.2s ease, font-weight 0.2s ease; display: inline-block; }
+        .editable-value:hover { background-color: rgba(255, 255, 255, 0.08); }
+        .inline-input { width: 80px; background-color: #3a3a3c; border: 1px solid var(--brand-blue); color: white; text-align: right; border-radius: 6px; padding: 1px 6px; font-family: 'Inter', sans-serif; font-size: 14px; -moz-appearance: textfield; }
+        .inline-input::-webkit-outer-spin-button, .inline-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .slider-container.disabled { opacity: 0.6; }
+        .slider-container.disabled .editable-value { cursor: not-allowed; }
+        .slider-container.disabled .editable-value:hover { background-color: transparent; }
+
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #3a3a3c; transition: .4s; border-radius: 28px; }
+        .switch-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .switch-slider { background-color: var(--brand-blue); }
+        input:checked + .switch-slider:before { transform: translateX(22px); }
+        input:disabled + .switch-slider { cursor: not-allowed; background-color: #2c2c2e; }
+
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details > summary { display: flex; justify-content="space-between"; align-items: center; cursor: pointer; font-weight: 600; padding: 8px 0; }
+        details > summary::after { content: '+'; font-size: 1.5em; line-height: 1; font-weight: bold; transition: transform 0.2s ease; }
+        details[open] > summary::after { content: '×'; transform: rotate(0deg); }
+        .info-icon { cursor: help; }
+
+        .screener-favorable { background-color: rgba(48, 209, 88, 0.15); border: 1px solid var(--profit-color); box-shadow: 0 0 15px rgba(48, 209, 88, 0.2); transition: all 0.3s ease; }
+        .screener-caution { background-color: rgba(255, 214, 10, 0.15); border: 1px solid var(--caution-color); box-shadow: 0 0 15px rgba(255, 214, 10, 0.2); transition: all 0.3s ease; }
+        .screener-high-risk { background-color: rgba(255, 69, 58, 0.15); border: 1px solid var(--loss-color); box-shadow: 0 0 15px rgba(255, 69, 58, 0.2); transition: all 0.3s ease; }
+        .screener-disabled { background-color: rgba(36, 36, 38, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); color: rgba(235, 235, 245, 0.6); box-shadow: none; transition: all 0.3s ease; }
+        .screener-disabled .info-icon { color: rgba(235, 235, 245, 0.4); cursor: default; }
+
+        #autoAdjustNotification { border-color: var(--brand-blue); background-color: rgba(10, 132, 255, 0.1); }
+        #intelligentAdvisorMessage { background-color: rgba(255, 69, 58, 0.15); border: 1px solid #FF453A; border-radius: 12px; padding: 15px; box-shadow: 0 5px 15px rgba(255, 69, 58, 0.2); transition: all 0.3s ease; }
+        #intelligentAdvisorMessage.caution-state { background-color: rgba(255, 214, 10, 0.15); border-color: #FFD60A; box-shadow: 0 5px 15px rgba(255, 214, 10, 0.2); }
+        #intelligentAdvisorMessage .text-red-400 { color: #FF453A; font-weight: 700; }
+        #intelligentAdvisorMessage .text-yellow-300 { color: #FFD60A; font-weight: 600; }
+        #intelligentAdvisorMessage ul { list-style-type: disc; padding-left: 20px; margin-top: 8px; }
+        #intelligentAdvisorMessage ul li { margin-bottom: 4px; }
+
+        .mode-toggle-switch { position: absolute; top: 15px; right: 15px; z-index: 10; }
+        .mode-toggle-switch .switch-label { font-size: 11px; color: rgba(255, 255, 255, 0.5); margin-right: 5px; font-weight: normal; }
+
+        .rr-grade { display: flex; align-items: center; font-size: 13px; font-weight: 500; margin-top: 4px; gap: 4px; }
+        .rr-grade .grade-icon { font-size: 1.2em; }
+        #projectedTp, #projectedSl { font-size: 1.8em; font-weight: 300; }
+        .text-xs.text-gray-400 { opacity: 0.7; }
+        #portfolioBalance, #availableBalance { font-size: 1.1em; font-weight: 500; }
+        .font-mono { font-family: 'SF Mono', 'Consolas', 'Menlo', monospace; }
+		.form-select {
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238E8E93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
+        }
+        #clearHistoryBtn {
+            background-color: rgba(255, 69, 58, 0.8);
+            color: white;
+        }
+        #clearHistoryBtn:hover {
+            background-color: #FF453A;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div id="copyTooltip">คัดลอกแล้ว!</div>
+    <div id="infoTooltip"></div>
+
+    <div id="deleteConfirmModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="card p-8 w-full max-w-sm fade-in">
+            <div class="text-center">
+                <i data-lucide="alert-triangle" class="mx-auto h-12 w-12 text-yellow-400"></i>
+                <h2 class="text-2xl font-bold mt-4">ยืนยันการลบ</h2>
+                <p id="deleteConfirmMessage" class="text-gray-400 mt-2">คุณแน่ใจหรือไม่ว่าต้องการลบรายการเทรดนี้? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+            </div>
+            <div class="mt-8 grid grid-cols-2 gap-4">
+                <button id="cancelDelete" class="w-full btn btn-secondary bg-gray-600 text-white">ยกเลิก</button>
+                <button id="confirmDelete" class="w-full btn btn-primary bg-red-600 hover:bg-red-500">ยืนยัน</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tradeConfirmModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="card p-8 w-full max-w-md fade-in">
+            <h2 id="tradeConfirmTitle" class="text-2xl font-bold text-center mb-6">Confirm Trade</h2>
+            <div id="tradeConfirmDetails" class="space-y-3 text-lg mb-8"></div>
+            <div class="grid grid-cols-2 gap-4">
+                <button id="cancelTrade" class="w-full btn btn-secondary bg-gray-600 text-white">ยกเลิก</button>
+                <button id="confirmDemoTrade" class="w-full btn btn-primary">ยืนยัน (Demo)</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="priceAlertModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="card p-8 w-full max-w-sm fade-in">
+            <div class="text-center">
+                <i data-lucide="bell-ring" class="mx-auto h-12 w-12 text-caution-color"></i>
+                <h2 id="priceAlertModalTitle" class="text-2xl font-bold mt-4 text-caution-color">🔔 PRICE ALERT 🔔</h2>
+                <p id="priceAlertModalDetails" class="text-gray-200 mt-2 text-lg"></p>
+            </div>
+            <div class="mt-8 grid grid-cols-2 gap-4">
+                <button id="dismissAlertBtn" class="w-full btn btn-secondary bg-gray-600 text-white">ปิด</button>
+                <button id="planFromAlertBtn" class="w-full btn btn-primary">เริ่มวางแผนเทรด</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="authContainer" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div id="teamIdModal" class="hidden card p-8 w-full max-w-sm fade-in">
+            <div class="text-center">
+                <i data-lucide="users" class="mx-auto h-12 w-12 text-gray-400"></i>
+                <h2 class="text-2xl font-bold mt-4">Team Access</h2>
+                <p class="text-gray-400 mt-2">กรุณาใส่ Team ID ของคุณเพื่อเข้าถึงข้อมูลของทีม</p>
+            </div>
+            <div class="mt-6 space-y-4">
+                <input type="text" id="teamIdInput" placeholder="Enter Team ID" class="form-input w-full text-center">
+                <button id="teamIdSubmit" class="btn btn-primary w-full">เข้าสู่ระบบ</button>
+            </div>
+        </div>
+        <div id="loader" class="text-center">
+             <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-brand-blue mx-auto"></div>
+             <p class="mt-4 text-lg">กำลังตรวจสอบสิทธิ์...</p>
+        </div>
+    </div>
+
+    <main id="appContent" class="hidden w-full max-w-7xl mx-auto">
+        <header class="w-full mb-6 flex justify-between items-center">
+            <h1 class="text-3xl font-bold">Personal Trade App <span class="text-sm text-gray-400">V4.25.1</span></h1>
+            <div class="text-right">
+                <p class="text-sm text-gray-400">Team ID</p>
+                <p id="displayTeamId" class="font-mono text-lg break-all"></p>
+            </div>
+        </header>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <div class="lg:col-span-1 flex flex-col gap-6">
+                <div class="card p-6 fade-in">
+                    <div class="flex border-b border-white/10">
+                        <button class="tab-btn active" data-tab="risk"><i data-lucide="shield" class="inline-block mr-2 h-4 w-4"></i>Risk</button>
+                        <button class="tab-btn" data-tab="execute"><i data-lucide="swords" class="inline-block mr-2 h-4 w-4"></i>Execute</button>
+                        <button class="tab-btn" data-tab="settings"><i data-lucide="settings" class="inline-block mr-2 h-4 w-4"></i>Settings</button>
+                    </div>
+                    <div class="pt-6">
+                        <div data-tab-content="risk" class="fade-in">
+                             <div class="mode-toggle-switch flex items-center">
+                                 <span class="switch-label">Simple Mode</span>
+                                 <label class="switch !w-[40px] !h-[22px]">
+                                     <input type="checkbox" id="riskPanelModeToggle" checked>
+                                     <span class="switch-slider !rounded-full !before:w-[16px] !before:h-[16px] !before:left-[3px] !before:bottom-[3px] input:checked+&.switch-slider:before:transform:translateX(18px)"></span>
+                                 </label>
+                             </div>
+                             <div class="space-y-5">
+                                 <div class="text-center p-3 rounded-lg bg-black/20">
+                                    <div class="text-xs text-gray-400">PROJECTED BALANCE</div>
+                                    <div class="flex justify-around items-center mt-1 text-sm">
+                                        <span id="projectedTp" class="font-mono text-profit">...</span>
+                                        <span class="text-gray-500">|</span>
+                                        <span id="projectedSl" class="font-mono text-loss">...</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-sm text-gray-400">Live Portfolio Balance ($)</label>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <input type="text" inputmode="decimal" id="portfolioBalance" class="form-input w-full" placeholder="e.g., 10000.00">
+                                        <button id="resetBalanceBtn" class="btn btn-secondary !p-2.5 h-full aspect-square flex items-center justify-center shrink-0" title="Reset Balance">
+                                            <i data-lucide="rotate-cw" class="h-4 w-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div><label class="text-sm text-gray-400">Available Balance ($)</label><input type="text" id="availableBalance" class="form-input w-full mt-1" readonly></div>
+
+                                <div class="pt-4 border-t border-white/10 space-y-2">
+                                    <div class="flex justify-between items-center">
+                                        <h3 class="text-lg font-semibold text-gray-300">Risk Parameters</h3>
+                                        <button id="resetParamsBtn" class="btn btn-secondary !p-2 !rounded-full" title="Reset to Defaults">
+                                            <i data-lucide="rotate-ccw" class="h-4 w-4"></i>
+                                        </button>
+                                    </div>
+                                    <div id="riskPercentContainer" class="slider-container">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <label class="text-sm text-gray-400">% Risk</label>
+                                            <div class="text-right">
+                                                <span id="riskPercentValue" data-slider="riskPercentSlider" class="font-mono text-sm editable-value">1.0%</span>
+                                                <span id="riskAmountValue" class="font-mono text-sm text-gray-500 ml-1">($0.00)</span>
+                                            </div>
+                                        </div>
+                                        <input type="range" id="riskPercentSlider" min="0.1" max="10" step="0.1" value="1" class="slider">
+                                    </div>
+                                    <div id="stopLossPercentContainer" class="slider-container">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <label class="text-sm text-gray-400">Stop Loss (%)</label>
+                                            <span id="stopLossPercentValue" data-slider="stopLossPercentSlider" class="font-mono text-sm editable-value">1.0%</span>
+                                        </div>
+                                        <input type="range" id="stopLossPercentSlider" min="0.1" max="5" step="0.1" value="1" class="slider">
+                                    </div>
+                                    <div id="leverageContainer" class="slider-container">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <label class="text-sm text-gray-400">Leverage (X)</label>
+                                            <span id="leverageValue" data-slider="leverageSlider" class="font-mono text-sm editable-value">20x</span>
+                                        </div>
+                                        <input type="range" id="leverageSlider" min="1" max="125" step="1" value="20" class="slider">
+                                    </div>
+                                    <div id="riskRewardRatioContainer" class="slider-container">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <label class="text-sm text-gray-400">Risk/Reward Ratio</label>
+                                            <span id="riskRewardRatioValue" data-slider="riskRewardRatioSlider" class="font-mono text-sm editable-value">1 : 1.5</span>
+                                        </div>
+                                        <input type="range" id="riskRewardRatioSlider" min="0.5" max="10" step="0.1" value="1.5" class="slider">
+                                        <div id="rrFeasibilityGrade" class="rr-grade hidden">
+                                            <span id="rrGradeIcon" class="grade-icon"></span>
+                                            <span id="rrGradeText"></span>
+                                        </div>
+                                        <div id="rrBar" class="flex w-full h-3 mt-3 rounded-md overflow-hidden bg-gray-700">
+                                            <div class="bg-loss h-full transition-all duration-300" style="flex-grow: 1;"></div>
+                                            <div id="rrProfitBar" class="bg-profit h-full transition-all duration-300" style="flex-grow: 1.5;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pt-4 border-t border-white/10">
+                                    <label class="text-sm text-gray-400 mb-2 block">Setting Presets</label>
+                                    <div class="grid grid-cols-4 gap-2">
+                                        <button data-slot="1" class="btn btn-secondary preset-slot relative"><span class="saved-dot"></span>Slot 1</button>
+                                        <button data-slot="2" class="btn btn-secondary preset-slot relative"><span class="saved-dot"></span>Slot 2</button>
+                                        <button data-slot="3" class="btn btn-secondary preset-slot relative"><span class="saved-dot"></span>Slot 3</button>
+                                        <button id="savePreset" class="btn btn-primary flex items-center justify-center gap-1"><i data-lucide="save" class="h-4 w-4"></i>Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-tab-content="execute" class="hidden fade-in">
+                            <div class="p-1 bg-gray-800/50 rounded-lg flex mb-4">
+                                <button id="longDirBtn" data-direction="long" class="direction-btn btn w-full !rounded-md !py-2">LONG</button>
+                                <button id="shortDirBtn" data-direction="short" class="direction-btn btn w-full !rounded-md !py-2">SHORT</button>
+                            </div>
+                            <div id="autoAdjustNotification" class="hidden p-3 mb-4 rounded-lg border text-sm transition-opacity duration-300">
+                                 <div class="flex items-center gap-2">
+                                     <i data-lucide="info" class="h-5 w-5 text-blue-400"></i>
+                                     <p id="autoAdjustMessage" class="text-gray-200"></p>
+                                 </div>
+                             </div>
+                             <div class="space-y-4">
+                                <div id="marketScreener" class="p-3 rounded-lg text-center border">
+                                    <p class="font-bold flex items-center justify-center gap-2">
+                                        <span id="screenerStatusEmoji"></span>
+                                        <span id="screenerStatusText">...</span>
+                                        <i id="screenerInfoIcon" data-lucide="info" class="h-4 w-4 text-gray-400 info-icon"></i>
+                                    </p>
+                                    <p id="screenerCurrentStatus" class="text-sm text-gray-300 mt-2">กำลังวิเคราะห์สภาวะตลาด...</p>
+                                </div>
+
+                                <div id="intelligentAdvisorMessage" class="hidden p-4 rounded-lg mt-4">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="alert-triangle" class="h-5 w-5 text-red-400"></i>
+                                        <p class="font-bold text-red-400" id="advisorTitle">⚠️ ยอดเงินไม่เพียงพอ</p>
+                                    </div>
+                                    <p class="text-sm text-gray-300 mt-2" id="advisorRequiredAmount"></p>
+                                    <div id="advisorSuggestion" class="bg-black/20 p-3 rounded-md mt-3 hidden">
+                                        <p class="text-sm text-yellow-300 font-bold">คำแนะนำ:</p>
+                                        <ul class="list-disc pl-5 mt-1 text-sm text-gray-200" id="advisorSuggestionsList"></ul>
+                                        <button id="applyAdvisorSuggestionBtn" class="btn btn-primary w-full mt-3 !py-2.5 hidden">
+                                            <i data-lucide="check" class="h-4 w-4 mr-1"></i> ใช้คำแนะนำนี้
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-400 mt-2" id="advisorNote"></p>
+                                </div>
+
+                                <div id="tradeSummaryCard" class="card !p-4 !rounded-xl relative">
+                                    <button id="copyAllBtn" class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors p-1" title="Copy All">
+                                        <i data-lucide="copy" class="h-4 w-4"></i>
+                                    </button>
+                                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                                        <div class="copyable-row col-span-2"><span class="text-gray-400">Mode</span><span id="summaryMode" class="font-mono font-bold value-to-copy">...</span></div>
+                                        <div class="copyable-row col-span-2"><span class="text-gray-400">Coin</span><span id="summaryCoin" class="font-mono font-bold value-to-copy">...</span></div>
+                                        <hr class="border-white/10 my-1 col-span-2">
+                                        <div class="copyable-row"><span class="text-gray-400">Risk</span><span id="summaryRisk" class="font-mono value-to-copy">...</span></div>
+                                        <div class="copyable-row"><span class="text-gray-400">Leverage</span><span id="summaryLeverage" class="font-mono value-to-copy">...</span></div>
+                                        <div class="copyable-row col-span-2"><span class="text-gray-400">R:R Ratio</span><span id="summaryRR" class="font-mono value-to-copy">...</span></div>
+                                        <div class="copyable-row col-span-2"><span class="text-gray-400 flex items-center">Stop Loss %</span><span id="summarySLPercent" class="font-mono value-to-copy">...</span></div>
+                                        <hr class="border-white/10 my-1 col-span-2">
+                                        <div class="copyable-row col-span-2"><span class="text-gray-400">Entry</span><span id="summaryEntry" class="font-mono font-bold text-lg value-to-copy">...</span></div>
+                                        <div class="copyable-row col-span-2"><span class="text-gray-400">Margin</span><span id="summaryMargin" class="font-mono font-bold text-lg value-to-copy">...</span></div>
+                                        <div class="copyable-row col-span-2"><span class="text-profit">Take Profit</span><div class="text-right"><span id="summaryTp" class="font-mono font-bold text-lg text-profit value-to-copy">...</span><span id="summaryTpPl" class="block font-mono text-xs text-profit/80"></span></div></div>
+                                        <div class="copyable-row col-span-2"><span class="text-loss">Stop Loss</span><div class="text-right"><span id="summarySl" class="font-mono font-bold text-lg text-loss value-to-copy">...</span><span id="summarySlPl" class="block font-mono text-xs text-loss/80"></span></div></div>
+                                        <div class="copyable-row col-span-2 text-caution"><span>Liq. Price</span><span id="summaryLiqPrice" class="font-mono font-bold text-lg value-to-copy">...</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 rounded-lg bg-gray-800/50 border border-brand-blue/30">
+                                    <label for="systemModeSelect" class="text-md font-bold text-white mb-2 block">System Mode</label>
+                                    <select id="systemModeSelect" class="form-select w-full">
+                                        <option value="manual">Manual</option>
+                                        <option value="1326">1-3-2-6 System</option>
+                                        <option value="advanced">Advanced Recommendation</option>
+                                    </select>
+                                    <div id="systemStatusContainer" class="mt-3 p-2 rounded-md bg-black/30">
+                                        <p id="systemStatusText" class="text-sm text-gray-300 text-center">Manual mode is active.</p>
+                                    </div>
+                                </div>
+
+                                <div id="autoTradeStatusContainer" class="hidden">
+                                    <p class="text-sm font-bold text-blue-300 mb-2">Active Auto-Trades</p>
+                                    <div id="autoTradeStatusList" class="space-y-2"></div>
+                                </div>
+                                <div>
+                                    <label class="text-sm text-gray-400">Coin</label>
+                                    <select id="coinSelect" class="form-input w-full mt-1"></select>
+                                    <div id="recentCoinsContainer" class="flex items-center gap-2 mt-2"></div>
+                                    <p class="text-right text-sm text-gray-400 mt-1">Live Price: <span id="currentPrice" class="font-mono p-1 rounded-md transition-colors duration-500">$0.00</span></p>
+                                </div>
+                                <div>
+                                    <label class="text-sm text-gray-400">Entry Price</label>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <input type="number" id="entryPrice" class="form-input w-full" placeholder="Smart suggestion...">
+                                        <button id="useMarketPrice" class="btn btn-secondary whitespace-nowrap">Use Market</button>
+                                    </div>
+                                </div>
+                                <div class="pt-4 border-t border-white/10 space-y-3">
+                                     <label class="text-sm text-gray-400 mb-1 block">Execute Demo Trade</label>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <button id="longButton" class="btn bg-green-600 hover:bg-green-500 text-white flex items-center justify-center gap-2 py-3" title="Execute a trade in the current mode">
+                                            <i data-lucide="trending-up" class="h-5 w-5"></i> LONG
+                                        </button>
+                                        <button id="shortButton" class="btn bg-red-600 hover:bg-red-500 text-white flex items-center justify-center gap-2 py-3" title="Execute a trade in the current mode">
+                                            <i data-lucide="trending-down" class="h-5 w-5"></i> SHORT
+                                        </button>
+                                    </div>
+                                     <label class="text-sm text-gray-400 mt-2 mb-1 block">Manual Save</label>
+                                     <div class="grid grid-cols-2 gap-4">
+                                        <button id="saveTpButton" class="btn bg-profit/80 hover:bg-profit text-white flex items-center justify-center gap-2 py-3">Save (TP)</button>
+                                        <button id="saveSlButton" class="btn bg-loss/80 hover:bg-loss text-white flex items-center justify-center gap-2 py-3">Save (SL)</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-tab-content="settings" class="hidden fade-in">
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-300 mb-3 flex items-center justify-between">
+                                        <span class="flex items-center gap-2"><i data-lucide="sparkles" class="text-brand-blue"></i>Intelligent Assistant</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="masterSwitch" checked>
+                                            <span class="switch-slider"></span>
+                                        </label>
+                                    </h3>
+                                    <p class="text-xs text-gray-400">เปิด/ปิดระบบช่วยเหลืออัจฉริยะทั้งหมด</p>
+                                </div>
+                                <div class="pt-4 border-t border-white/10">
+                                    <h3 class="text-lg font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                                        <i data-lucide="book-open" class="text-gray-400"></i>User Guide
+                                    </h3>
+                                    <div class="space-y-2 text-sm text-gray-300">
+                                        <details>
+                                            <summary>System Modes</summary>
+                                            <div class="p-3 text-xs bg-black/20 rounded-b-lg">
+                                                <p><strong>1-3-2-6:</strong> คุณกำหนด SL, Lev, R:R เอง ระบบจะช่วยปรับขนาดความเสี่ยง (Risk) ตามลำดับ 1, 3, 2, 6 เท่า</p>
+                                                <p class="mt-2"><strong>Advanced:</strong> ระบบจะควบคุมพารามิเตอร์ทั้ง 4 อย่างตามสูตรสำเร็จ</p>
+                                            </div>
+                                        </details>
+                                         <details>
+                                            <summary>Market Screener</summary>
+                                            <div id="marketScreenerDetailsContent" class="p-3 text-xs bg-black/20 rounded-b-lg">
+                                                <p>ระบบจะวิเคราะห์แนวโน้มและความผันผวนของตลาดเพื่อแสดงเป็น "ไฟจราจร" บอกความเหมาะสมในการเทรด:</p>
+                                                <ul class="list-disc pl-4 mt-2">
+                                                    <li><strong class="text-profit">สีเขียว:</strong> ตลาดมีแนวโน้มชัดเจน เหมาะกับการเทรด</li>
+                                                    <li><strong class="text-caution">สีเหลือง:</strong> ตลาดเริ่มเป็น Sideways ควรระมัดระวัง</li>
+                                                    <li><strong class="text-loss">สีแดง:</strong> ตลาดผันผวนรุนแรง ควรงดเทรด</li>
+                                                </ul>
+                                            </div>
+                                        </details>
+                                        <details> <summary>Pre-Trade Safety Checks</summary>
+                                            <div id="preTradeSafetyDetailsContent" class="p-3 text-xs bg-black/20 rounded-b-lg">
+                                                <p>ระบบจะตรวจสอบความปลอดภัยก่อนเข้าเทรดเพื่อลดความเสี่ยง:</p>
+                                                <ul class="list-disc pl-4 mt-2">
+                                                    <li><strong class="text-profit">Margin Checker:</strong> ตรวจสอบว่า Margin ที่ต้องใช้ไม่เกิน 85% ของยอดเงินที่ใช้ได้ เพื่อรักษาสภาพคล่อง</li>
+                                                    <li><strong class="text-loss">Liquidation Shield:</strong> ตรวจสอบให้ Stop Loss ของคุณอยู่ห่างจากราคา Liquidation อย่างน้อย 5% เพื่อป้องกันการถูกล้างพอร์ต</li>
+                                                </ul>
+                                            </div>
+                                        </details>
+                                        <details> <summary>Volatility Adjuster</summary>
+                                            <div id="volatilityAdjusterDetailsContent" class="p-3 text-xs bg-black/20 rounded-b-lg">
+                                                <p>ระบบจะปรับค่า Stop Loss โดยอัตโนมัติให้สอดคล้องกับความผันผวนของตลาด เพื่อลดโอกาสถูก Stop Out โดยไม่จำเป็น:</p>
+                                                <ul class="list-disc pl-4 mt-2">
+                                                    <li>หากตลาดมีความผันผวนสูง (High Volatility) ระบบจะ <strong>ขยาย Stop Loss</strong> ให้กว้างขึ้น</li>
+                                                    <li>หากตลาดมีความผันผวนต่ำ (Low Volatility) ระบบจะ <strong>บีบ Stop Loss</strong> ให้แคบลง</li>
+                                                </ul>
+                                                <p class="mt-2">เมื่อเปิดใช้งานฟีเจอร์นี้ คุณจะไม่สามารถปรับ Stop Loss % ได้ด้วยตนเอง (ระบบจะควบคุมให้)</p>
+                                            </div>
+                                        </details>
+                                        <details>
+                                            <summary>Move SL to Break-even (SL->BE)</summary>
+                                            <div class="p-3 text-xs bg-black/20 rounded-b-lg">
+                                                <p>ฟีเจอร์นี้ช่วยให้คุณเลื่อน Stop Loss ของสถานะที่กำลังเป็นกำไร ไปยังราคาเท่าทุนโดยอัตโนมัติ</p>
+                                                <ul class="list-disc pl-4 mt-2">
+                                                    <li>เมื่อสถานะเทรดของคุณอยู่ในกำไร ปุ่ม <strong>[SL->BE]</strong> จะปรากฏขึ้นข้างปุ่มปิด (X) ในรายการ Active Trades</li>
+                                                    <li>การกดปุ่มนี้จะคำนวณราคาเท่าทุน (Entry Price + ค่าธรรมเนียม) และอัปเดต <strong>slPrice</strong> ของเทรดนั้นในฐานข้อมูล</li>
+                                                    <li>หลังจากนี้ เทรดนั้นจะไม่มีความเสี่ยงต่อการขาดทุนอีกต่อไป (Risk-Free)</li>
+                                                </ul>
+                                            </div>
+                                        </details>
+                                    </div>
+                                </div>
+                                <div class="pt-4 border-t border-white/10">
+                                     <div id="volatilityAdjusterContainer" class="transition-opacity duration-300">
+                                        <h3 class="text-lg font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                                            <i data-lucide="sliders-horizontal" class="text-brand-blue"></i>
+                                            Smart Adjustments
+                                            <label class="switch ml-auto">
+                                                <input type="checkbox" id="volatilityAdjusterSwitch" checked>
+                                                <span class="switch-slider"></span>
+                                            </label>
+                                        </h3>
+                                        <p class="text-xs text-gray-400">เปิด/ปิดระบบปรับ Stop Loss อัตโนมัติตามความผันผวนของตลาด</p>
+                                    </div>
+                                </div>
+                                <div class="pt-4 border-t border-white/10">
+                                    <h3 class="text-lg font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                                        <i data-lucide="key-round" class="text-amber-400"></i>Binance API
+                                    </h3>
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label for="binanceApiKey" class="text-sm text-gray-400">API Key</label>
+                                            <input type="text" id="binanceApiKey" class="form-input w-full mt-1" placeholder="Enter your Binance API Key">
+                                        </div>
+                                        <div>
+                                            <label for="binanceApiSecret" class="text-sm text-gray-400">API Secret</label>
+                                            <input type="password" id="binanceApiSecret" class="form-input w-full mt-1" placeholder="Enter your Binance API Secret">
+                                        </div>
+                                        <button id="saveBinanceKeys" class="btn btn-secondary !text-white !bg-amber-600/80 hover:!bg-amber-600 w-full">Save Binance Keys</button>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-2">API Keys are stored locally for convenience in this demo. In a real application, they must be managed on a secure server.</p>
+                                </div>
+                                <div class="pt-4 border-t border-white/10">
+                                    <h3 class="text-lg font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="#5865F2" viewBox="0 0 127 96"><g fill="#5865F2"><path d="M107.7,8.3C100.2,3.1,92.2,0,84.2,0C70.1,0,56.7,6.3,48.5,17.4C43.4,14.6,38,12.7,32.4,12.7C18.3,12.7,5.9,21.2,0,32.2c2.7-1.4,5.4-2.5,8.2-3.4C9.1,26.9,9.9,25,10.8,23.2C10.7,23,10.5,22.8,10.4,22.7C14.8,17.1,23.3,12.7,32.4,12.7c5.1,0,9.9,1.5,14.2,4.1c1.2-1.7,2.4-3.4,3.7-5C47.4,9,52.9,6.3,58.8,4.2C65.5,1.5,73,0,80.8,0c2.8,0,5.5,0.2,8.1,0.6C102.3,3.3,115.8,11.5,121.9,23.2c0.2,0.4,0.3,0.8,0.5,1.2C124.5,23.4,125.8,22.5,127,21.6C122.2,15.6,115.5,11,107.7,8.3z"/><path d="M48.5,17.4C48.5,17.4,48.5,17.4,48.5,17.4c-1.6-1.9-3.2-3.8-4.7-5.5c-1.1,0.9-2.2,1.8-3.3,2.6c-0.2,0.1-0.3,0.3-0.5,0.4c-0.1,0.2-0.2,0.3-0.3,0.5c-0.9,1.9-1.8,3.9-2.6,5.9c-0.1,0.2-0.2,0.4-0.3,0.6c-2.8,0.9-5.5,2-8.2,3.4c0,0,0,0,0,0.1c5.9-11,18.3-19.5,32.4-19.5c5.6,0,10.9,1.9,15.4,5.1c-1,1.1-2,2.2-2.9,3.3c-2.3-1.4-4.8-2.6-7.5-3.6c-2.5-1-5-1.9-7.6-2.6C56.7,6.3,52.5,3.9,48.5,17.4z"/><path d="M45.2,54.3c0,0-0.1,0-0.1,0.1c0,0.1,0,0.1,0,0.2c0,3.3,2.7,6,6,6s6-2.7,6-6c0,0,0-0.1,0-0.1c0-0.1,0-0.1-0.1-0.2c-0.5-0.9-1.2-1.8-1.9-2.6c-0.7,0.7-1.5,1.4-2.4,2c-0,0-0,0-0.1,0c-0.1,0-0.1-0.1-0.1-0.1c0-0.1,0.1-0.2,0.1-0.2c0.1-0.1,0.2-0.1,0.2-0.2c1.4-0.9,2.7-2,3.9-3.2c-2.1-2.1-4.7-3.5-7.6-4.2C50.2,43,47.4,47.9,45.2,54.3z"/><path d="M81.5,54.3c0,0-0.1,0-0.1,0.1c0,0.1,0,0.1,0,0.2c0,3.3,2.7,6,6,6s6-2.7,6-6c0-0.1,0-0.1,0-0.2c0,0-0.1-0.1-0.1-0.1c-0.5-0.9-1.2-1.8-1.9-2.6c-0.7,0.7-1.5,1.4-2.4,2c-0.1,0-0.1,0-0.1,0c-0.1,0-0.1-0.1-0.1-0.1v-0.1c0,0,0.1-0.1,0.1-0.2s0.2-0.1,0.2-0.2c1.4-0.9,2.7-2,3.9-3.2c-2.1-2.1-4.7-3.5-7.6-4.2C86.2,43,83.4,47.9,81.5,54.3z"/><path d="M78.5,84.3c-10.3,0-19.4-3.2-26.6-8.6c1.1-1.4,2.2-2.8,3.2-4.3c1.2-2.3,2.3-4.6,3.3-6.9c1.5-3.5,2.9-7.2,4.1-10.9c0.2-0.7,0.4-1.3,0.6-2c-0.4-0.2-0.8-0.3-1.2-0.5c-1.4-0.5-2.8-1-4.1-1.6c-1.7-0.7-3.3-1.5-4.9-2.3c-2.4-1.2-4.7-2.6-6.9-4.1c-2.5-1-5-1.9-7.6-2.6C56.7,6.3,52.5,3.9,48.5,17.4z"/></g></svg>
+                                        Discord Notifications
+                                    </h3>
+                                    <div>
+                                        <label for="discordWebhookUrl" class="text-sm text-gray-400">Webhook URL</label>
+                                        <input type="text" id="discordWebhookUrl" class="form-input w-full mt-1" placeholder="Enter your Discord Webhook URL">
+                                    </div>
+                                    <button id="saveDiscordUrl" class="btn btn-secondary !text-white bg-[rgba(88,101,242,0.8)] hover:!bg-[#5865F2] w-full mt-3">Save Discord URL</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 card p-6 fade-in flex flex-col gap-6">
+                <div>
+                    <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="bar-chart-2" class="mr-2 h-5 w-5"></i>Live Stats</h2>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div><p class="text-sm text-gray-400">Net P/L</p><p id="liveStatsPl" class="text-lg font-bold">...</p></div>
+                        <div><p class="text-sm text-gray-400">Win Rate</p><p id="liveStatsWinRate" class="text-lg font-bold">...</p></div>
+                        <div><p class="text-sm text-gray-400">Trades</p><p id="liveStatsTotal" class="text-lg font-bold">...</p></div>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-white/10">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="bell" class="text-brand-blue h-5 w-5"></i>Price Alerts
+                    </h3>
+                    <div class="space-y-3 p-4 rounded-lg bg-black/20">
+                        <div>
+                            <label for="alertCoinSelect" class="text-sm text-gray-400">เหรียญ</label>
+                            <select id="alertCoinSelect" class="form-select w-full mt-1"></select>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-1/2">
+                                <label for="alertCondition" class="text-sm text-gray-400">เงื่อนไข</label>
+                                <select id="alertCondition" class="form-select w-full mt-1">
+                                    <option value="gte">มากกว่าหรือเท่ากับ (>=)</option>
+                                    <option value="lte">น้อยกว่าหรือเท่ากับ (<=)</option>
+                                </select>
+                            </div>
+                            <div class="w-1/2">
+                                <label for="alertTargetPrice" class="text-sm text-gray-400">ราคาเป้าหมาย ($)</label>
+                                <input type="number" inputmode="decimal" id="alertTargetPrice" class="form-input w-full mt-1" placeholder="เช่น 65000.00">
+                            </div>
+                        </div>
+                        <button id="setPriceAlertBtn" class="btn btn-primary w-full py-3 flex items-center justify-center gap-2">
+                            <i data-lucide="bell-plus" class="h-5 w-5"></i> ตั้งค่าแจ้งเตือน
+                        </button>
+                    </div>
+                    <div id="activeAlertsContainer" class="mt-4 hidden">
+                        <p class="text-sm font-bold text-gray-300 mb-2">การแจ้งเตือนที่เปิดใช้งานอยู่</p>
+                        <div id="activeAlertsList" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-white/10 flex flex-col flex-grow">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold flex items-center"><i data-lucide="history" class="mr-2 h-5 w-5"></i>Trade History</h2>
+                        <button id="clearHistoryBtn" class="btn btn-secondary !text-white !bg-red-600/80 hover:!bg-red-600 py-2 px-4 text-sm" title="Clear All Trade History">
+                            <i data-lucide="trash-2" class="h-4 w-4 mr-1"></i> Clear All
+                        </button>
+                    </div>
+                    <div id="tradeHistoryContainer" class="flex-grow space-y-3 h-[calc(100vh-500px)] overflow-y-auto pr-2">
+                        <div id="emptyState" class="h-full flex flex-col items-center justify-center text-center text-gray-500"><i data-lucide="archive" class="h-20 w-20"></i><p class="mt-4 text-lg">ยังไม่มีรายการเทรด</p><p>รายการเทรดที่บันทึกไว้จะแสดงที่นี่</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot, setDoc, addDoc, updateDoc, deleteDoc, collection, serverTimestamp, writeBatch, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Firebase services and app state
+    let db, auth;
+    let teamId, appId;
+
+    let unsubscribeSettings, unsubscribePresets, unsubscribeActiveTrades, unsubscribeHistory, unsubscribeSystemState, unsubscribePriceAlerts;
+
+    // Application state
+    let state = {
+        settings: { portfolioBalance: 10000 },
+        systemState: { mode: 'manual', step: 1, baseRiskUnit: 0.01 },
+        presets: {},
+        activeTrades: {},
+        tradeHistory: [],
+        coinsData: [],
+        lastPrices: {},
+        tradeCalculations: {},
+        availableBalance: 10000,
+        tradeToConfirm: null,
+        isIntelligentSystemEnabled: true,
+        isVolatilityAdjusterEnabled: false,
+        userSetSLPercent: 0.01,
+        marketScreenerATR: 0.0,
+        marketScreenerStatus: null,
+        userHasOverriddenSL: false,
+        isSimpleMode: true,
+        advisorSuggestions: { slP: null, lev: null },
+        currentTradeDirection: 'long',
+        priceAlerts: {},
+        alertToPlan: null, // NEW: State for actionable alert
+        isAlertModalOpen: false // NEW: Flag to prevent re-triggering alert modal
+    };
+
+    // UI state
+    let webSocketConnections = {};
+    let selectedPresetSlot = '1';
+    let isUsingSmartPrice = true;
+    let isTrackingMarketPrice = false;
+    let tradeToDelete = null;
+    let debounceTimer;
+    let infoTooltipHideTimer;
+    let isClearingHistory = false;
+    let isClosingTrade = false; // NEW FIX: Flag to prevent concurrent trade closing
+
+    // Constants
+    const FEE_RATE = 0.0004;
+    const SMART_PRICE_OFFSET = 0.001;
+    const BREAKEVEN_FEE_BUFFER = 0.0002; // Extra buffer for breakeven SL adjustment
+    const SYSTEM_1326_MULTIPLIERS = [1, 3, 2, 6];
+    const DEFAULT_BALANCE = 10000.00;
+    const ADVANCED_SYSTEM_CONFIG = [
+        { step: 1, riskPercent: 0.075, slPercent: 0.008, leverage: 25, rrRatio: 1.3 },
+        { step: 2, riskPercent: 0.060, slPercent: 0.007, leverage: 35, rrRatio: 1.4 },
+        { step: 3, riskPercent: 0.055, slPercent: 0.006, leverage: 30, rrRatio: 1.5 },
+        { step: 4, riskPercent: 0.080, slPercent: 0.009, leverage: 45, rrRatio: 1.2 }
+    ];
+
+    const BINANCE_API_BASE_URL = 'https://api.binance.com/api/v3';
+    const KLINES_INTERVAL_1H = '1h';
+    const KLINES_LIMIT = 100;
+    const INDICATOR_PERIOD = 14;
+    const ADX_TREND_THRESHOLD = 25;
+    const ADX_SIDEWAYS_THRESHOLD = 20;
+    const ATR_HIGH_VOL_FACTOR_PERCENT = 1.5;
+    const ATR_LOW_VOL_FACTOR_PERCENT = 0.5;
+    const MARGIN_BUFFER_PERCENTAGE = 0.15;
+    const LIQUIDATION_BUFFER_PERCENTAGE = 0.05;
+    const ATR_BASE_SL_PERCENT_ADJUSTED = 0.008;
+    const ATR_ADJUST_FACTOR_HIGH = 1.5;
+    const ATR_ADJUST_FACTOR_LOW = 0.7;
+    let lastKlinesFetchTime = {};
+
+     const dom = {
+        // ... (all previous dom elements) ...
+        priceAlertModal: document.getElementById('priceAlertModal'),
+        priceAlertModalTitle: document.getElementById('priceAlertModalTitle'),
+        priceAlertModalDetails: document.getElementById('priceAlertModalDetails'),
+        dismissAlertBtn: document.getElementById('dismissAlertBtn'),
+        planFromAlertBtn: document.getElementById('planFromAlertBtn'),
+
+        authContainer: document.getElementById('authContainer'),
+        loader: document.getElementById('loader'),
+        teamIdModal: document.getElementById('teamIdModal'),
+        teamIdInput: document.getElementById('teamIdInput'),
+        teamIdSubmit: document.getElementById('teamIdSubmit'),
+        appContent: document.getElementById('appContent'),
+        displayTeamId: document.getElementById('displayTeamId'),
+        projectedTp: document.getElementById('projectedTp'),
+        projectedSl: document.getElementById('projectedSl'),
+        portfolioBalance: document.getElementById('portfolioBalance'),
+        availableBalance: document.getElementById('availableBalance'),
+        resetParamsBtn: document.getElementById('resetParamsBtn'),
+        riskPercentContainer: document.getElementById('riskPercentContainer'),
+        riskPercentSlider: document.getElementById('riskPercentSlider'),
+        riskPercentValue: document.getElementById('riskPercentValue'),
+        riskAmountValue: document.getElementById('riskAmountValue'),
+        stopLossPercentContainer: document.getElementById('stopLossPercentContainer'),
+        stopLossPercentSlider: document.getElementById('stopLossPercentSlider'),
+        stopLossPercentValue: document.getElementById('stopLossPercentValue'),
+        leverageContainer: document.getElementById('leverageContainer'),
+        leverageSlider: document.getElementById('leverageSlider'),
+        leverageValue: document.getElementById('leverageValue'),
+        riskRewardRatioContainer: document.getElementById('riskRewardRatioContainer'),
+        riskRewardRatioSlider: document.getElementById('riskRewardRatioSlider'),
+        riskRewardRatioValue: document.getElementById('riskRewardRatioValue'),
+        rrProfitBar: document.getElementById('rrProfitBar'),
+        presetSlots: document.querySelectorAll('.preset-slot'),
+        savePreset: document.getElementById('savePreset'),
+        resetBalanceBtn: document.getElementById('resetBalanceBtn'),
+        riskTabContent: document.querySelector('[data-tab-content="risk"]'),
+        systemModeSelect: document.getElementById('systemModeSelect'),
+        systemStatusContainer: document.getElementById('systemStatusContainer'),
+        systemStatusText: document.getElementById('systemStatusText'),
+        coinSelect: document.getElementById('coinSelect'),
+        recentCoinsContainer: document.getElementById('recentCoinsContainer'),
+        currentPrice: document.getElementById('currentPrice'),
+        longButton: document.getElementById('longButton'),
+        shortButton: document.getElementById('shortButton'),
+        saveTpButton: document.getElementById('saveTpButton'),
+        saveSlButton: document.getElementById('saveSlButton'),
+        entryPrice: document.getElementById('entryPrice'),
+        useMarketPrice: document.getElementById('useMarketPrice'),
+        autoTradeStatusContainer: document.getElementById('autoTradeStatusContainer'),
+        autoTradeStatusList: document.getElementById('autoTradeStatusList'),
+        tradeHistoryContainer: document.getElementById('tradeHistoryContainer'),
+        emptyState: document.getElementById('emptyState'),
+        copyTooltip: document.getElementById('copyTooltip'),
+        infoTooltip: document.getElementById('infoTooltip'),
+        liveStatsPl: document.getElementById('liveStatsPl'),
+        liveStatsWinRate: document.getElementById('liveStatsWinRate'),
+        liveStatsTotal: document.getElementById('liveStatsTotal'),
+        deleteConfirmModal: document.getElementById('deleteConfirmModal'),
+        deleteConfirmMessage: document.getElementById('deleteConfirmMessage'), // NEW
+        cancelDelete: document.getElementById('cancelDelete'),
+        confirmDelete: document.getElementById('confirmDelete'),
+        tradeConfirmModal: document.getElementById('tradeConfirmModal'),
+        tradeConfirmTitle: document.getElementById('tradeConfirmTitle'),
+        tradeConfirmDetails: document.getElementById('tradeConfirmDetails'),
+        cancelTrade: document.getElementById('cancelTrade'),
+        confirmDemoTrade: document.getElementById('confirmDemoTrade'),
+        binanceApiKey: document.getElementById('binanceApiKey'),
+        binanceApiSecret: document.getElementById('binanceApiSecret'),
+        saveBinanceKeys: document.getElementById('saveBinanceKeys'),
+        discordWebhookUrl: document.getElementById('discordWebhookUrl'),
+        saveDiscordUrl: document.getElementById('saveDiscordUrl'),
+        tradeSummaryCard: document.getElementById('tradeSummaryCard'),
+        copyAllBtn: document.getElementById('copyAllBtn'),
+        summary: {
+            mode: document.getElementById('summaryMode'),
+            coin: document.getElementById('summaryCoin'),
+            risk: document.getElementById('summaryRisk'),
+            leverage: document.getElementById('summaryLeverage'),
+            rr: document.getElementById('summaryRR'),
+            entry: document.getElementById('summaryEntry'),
+            margin: document.getElementById('summaryMargin'),
+            tp: document.getElementById('summaryTp'),
+            sl: document.getElementById('summarySl'),
+            slPercent: document.getElementById('summarySLPercent'),
+            tpPl: document.getElementById('summaryTpPl'),
+            slPl: document.getElementById('summarySlPl'),
+            liqPrice: document.getElementById('summaryLiqPrice'),
+        },
+        masterSwitch: document.getElementById('masterSwitch'),
+        marketScreener: document.getElementById('marketScreener'),
+        screenerStatusEmoji: document.getElementById('screenerStatusEmoji'),
+        screenerStatusText: document.getElementById('screenerStatusText'),
+        screenerInfoIcon: document.getElementById('screenerInfoIcon'),
+        screenerUserGuideContent: document.getElementById('marketScreenerDetailsContent'),
+        screenerCurrentStatus: document.getElementById('screenerCurrentStatus'),
+        intelligentAdvisorMessage: document.getElementById('intelligentAdvisorMessage'),
+        advisorTitle: document.getElementById('advisorTitle'),
+        advisorRequiredAmount: document.getElementById('advisorRequiredAmount'),
+        advisorSuggestion: document.getElementById('advisorSuggestion'),
+        advisorSuggestionsList: document.getElementById('advisorSuggestionsList'),
+        advisorNote: document.getElementById('advisorNote'),
+        autoAdjustNotification: document.getElementById('autoAdjustNotification'),
+        autoAdjustMessage: document.getElementById('autoAdjustMessage'),
+        preTradeSafetyDetailsContent: document.getElementById('preTradeSafetyDetailsContent'),
+        volatilityAdjusterSwitch: document.getElementById('volatilityAdjusterSwitch'),
+        volatilityAdjusterContainer: document.getElementById('volatilityAdjusterContainer'),
+        volatilityAdjusterDetailsContent: document.getElementById('volatilityAdjusterDetailsContent'),
+        riskPanelModeToggle: document.getElementById('riskPanelModeToggle'),
+        rrFeasibilityGrade: document.getElementById('rrFeasibilityGrade'),
+        rrGradeIcon: document.getElementById('rrGradeIcon'),
+        rrGradeText: document.getElementById('rrGradeText'),
+        applyAdvisorSuggestionBtn: document.getElementById('applyAdvisorSuggestionBtn'),
+        longDirBtn: document.getElementById('longDirBtn'),
+        shortDirBtn: document.getElementById('shortDirBtn'),
+        alertCoinSelect: document.getElementById('alertCoinSelect'),
+        alertCondition: document.getElementById('alertCondition'),
+        alertTargetPrice: document.getElementById('alertTargetPrice'),
+        setPriceAlertBtn: document.getElementById('setPriceAlertBtn'),
+        activeAlertsContainer: document.getElementById('activeAlertsContainer'),
+        activeAlertsList: document.getElementById('activeAlertsList'),
+        clearHistoryBtn: document.getElementById('clearHistoryBtn'), // NEW
+    };
+
+    function init() {
+        lucide.createIcons();
+        addEventListeners();
+        fetchCoinsFromCoinGecko();
+        initializeFirebase();
+        loadLocalSettings();
+        updateIntelligentSystemUI();
+        handleDirectionChange('long');
+        updateRiskPanelModeUI();
+    }
+    async function initializeFirebase() {
+        const firebaseConfig = {
+          apiKey: "AIzaSyBzS6t2IY3UDTn3mKEeFTyvceTkaE6i2RE",
+          authDomain: "natt-trade-app.firebaseapp.com",
+          databaseURL: "https://natt-trade-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "natt-trade-app",
+          storageBucket: "natt-trade-app.appspot.com",
+          messagingSenderId: "148781220963",
+          appId: "1:148781220963:web:24b7588dc258bc733a2456"
+        };
+        appId = 'personal_trade_app_firestore';
+        if (!firebaseConfig.apiKey) {
+             dom.authContainer.innerHTML = `<p class="text-red-500 text-center">Error: Firebase config missing.</p>`;
+             return;
+        }
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    dom.loader.classList.add('hidden');
+                    dom.teamIdModal.classList.remove('hidden');
+                } else {
+                    dom.loader.classList.remove('hidden');
+                    dom.teamIdModal.classList.add('hidden');
+                    await signInAnonymously(auth);
+                }
+            });
+        } catch (error) {
+            console.error("Firebase Initialization Error:", error);
+             dom.authContainer.innerHTML = `<p class="text-red-500 text-center">Could not connect to services.</p>`;
+        }
+    }
+
+    function startApp(enteredTeamId) {
+        teamId = enteredTeamId.trim().replace(/[.#$[\]]/g, '_');
+        if (!teamId) { alert("Team ID cannot be empty."); return; }
+        dom.displayTeamId.textContent = teamId;
+        dom.authContainer.classList.add('hidden');
+        dom.appContent.classList.remove('hidden');
+        detachFirestoreListeners();
+        setupFirestoreListeners(teamId);
+    }
+
+    function detachFirestoreListeners() {
+        if (unsubscribeSettings) unsubscribeSettings();
+        if (unsubscribePresets) unsubscribePresets();
+        if (unsubscribeActiveTrades) unsubscribeActiveTrades();
+        if (unsubscribeHistory) unsubscribeHistory();
+        if (unsubscribeSystemState) unsubscribeSystemState();
+        if (unsubscribePriceAlerts) unsubscribePriceAlerts();
+    }
+
+    function setupFirestoreListeners(currentTeamId) {
+        if (!db || !currentTeamId) return;
+        const basePath = `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{currentTeamId}`;
+
+        const settingsDocRef = doc(db, basePath, 'settings', 'main');
+        unsubscribeSettings = onSnapshot(settingsDocRef, (docSnap) => {
+            state.settings = docSnap.exists() ? docSnap.data() : { portfolioBalance: DEFAULT_BALANCE };
+            if (document.activeElement !== dom.portfolioBalance) {
+                const balance = state.settings.portfolioBalance || DEFAULT_BALANCE;
+                dom.portfolioBalance.value = formatCurrency(balance, false, false);
+            }
+            if (!docSnap.exists()) setDoc(settingsDocRef, state.settings);
+            calculateAll();
+        }, console.error);
+
+        const systemStateRef = doc(db, basePath, 'system', 'state');
+        unsubscribeSystemState = onSnapshot(systemStateRef, (docSnap) => {
+            state.systemState = { ...{mode: 'manual', step: 1, baseRiskUnit: 0.01}, ...(docSnap.exists() ? docSnap.data() : {}) };
+            if (!docSnap.exists()) setDoc(systemStateRef, state.systemState);
+            calculateAll();
+        }, console.error);
+
+        const presetsCollectionRef = collection(db, `${basePath}/presets`);
+        unsubscribePresets = onSnapshot(presetsCollectionRef, (snapshot) => {
+            state.presets = {};
+            snapshot.forEach(doc => { state.presets[doc.id] = doc.data(); });
+            dom.presetSlots.forEach(btn => btn.classList.toggle('has-data', !!state.presets[`slot${btn.dataset.slot}`]));
+            loadPreset(selectedPresetSlot);
+        }, console.error);
+
+        const activeTradesCollectionRef = collection(db, `${basePath}/activeTrades`);
+        unsubscribeActiveTrades = onSnapshot(activeTradesCollectionRef, (snapshot) => {
+            state.activeTrades = {};
+            snapshot.forEach(doc => { state.activeTrades[doc.id] = { ...doc.data(), id: doc.id }; });
+            // MODIFIED FIX: Ensure WebSocket for each active trade symbol is managed
+            Object.values(state.activeTrades).forEach(trade => {
+                if (trade.coin && trade.coin.symbol) {
+                    manageWebSocket(trade.coin.symbol.toLowerCase());
+                }
+            });
+            calculateAll();
+        }, console.error);
+
+        const historyCollectionRef = collection(db, `${basePath}/tradeHistory`);
+        unsubscribeHistory = onSnapshot(historyCollectionRef, (snapshot) => {
+            state.tradeHistory = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            state.tradeHistory.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+            renderTradeHistory(state.tradeHistory);
+            renderRecentCoins(state.tradeHistory);
+            calculateAndRenderLiveStats(state.tradeHistory);
+        }, console.error);
+
+        const priceAlertsCollectionRef = collection(db, `${basePath}/priceAlerts`);
+        unsubscribePriceAlerts = onSnapshot(priceAlertsCollectionRef, (snapshot) => {
+            state.priceAlerts = {};
+            snapshot.forEach(doc => {
+                const alertData = { ...doc.data(), id: doc.id };
+                state.priceAlerts[doc.id] = alertData;
+                 if(alertData.status === 'active' && alertData.coin?.symbol) {
+                    manageWebSocket(alertData.coin.symbol.toLowerCase());
+                }
+            });
+            renderActiveAlerts(state.priceAlerts);
+        }, console.error);
+    }
+
+    function addEventListeners() {
+        dom.teamIdSubmit.addEventListener('click', () => startApp(dom.teamIdInput.value));
+        dom.teamIdInput.addEventListener('keyup', (e) => { if (e.key === 'Enter') startApp(dom.teamIdInput.value); });
+        dom.portfolioBalance.addEventListener('blur', () => {
+            const value = parseFloat(dom.portfolioBalance.value.replace(/,/g, '')) || 0;
+            dom.portfolioBalance.value = formatCurrency(value, false, false);
+            updatePortfolioBalanceInDb();
+        });
+        dom.portfolioBalance.addEventListener('input', calculateAll);
+        dom.systemModeSelect.addEventListener('change', handleSystemModeChange);
+
+        [dom.riskPercentSlider, dom.riskRewardRatioSlider, dom.leverageSlider]
+            .forEach(slider => slider.addEventListener('input', () => { calculateAll(); }));
+
+        const slSlider = dom.stopLossPercentSlider;
+        const slValueSpan = dom.stopLossPercentValue;
+        const handleSLInteraction = () => {
+            state.userHasOverriddenSL = true;
+            slValueSpan.classList.remove('text-brand-blue', 'font-bold');
+            calculateAll();
+        };
+        slSlider.addEventListener('input', handleSLInteraction);
+        slSlider.addEventListener('mousedown', () => { state.userHasOverriddenSL = true; slValueSpan.classList.remove('text-brand-blue', 'font-bold'); });
+        slSlider.addEventListener('touchstart', () => { state.userHasOverriddenSL = true; slValueSpan.classList.remove('text-brand-blue', 'font-bold'); });
+        dom.longDirBtn.addEventListener('click', () => handleDirectionChange('long'));
+        dom.shortDirBtn.addEventListener('click', () => handleDirectionChange('short'));
+        dom.setPriceAlertBtn.addEventListener('click', setPriceAlert);
+
+        dom.coinSelect.addEventListener('change', () => handleCoinSelection(dom.coinSelect.value));
+        dom.entryPrice.addEventListener('input', () => { isUsingSmartPrice = false; toggleMarketTracking(false); calculateAll(); });
+        dom.longButton.addEventListener('click', () => { showTradeConfirmationModal('long'); });
+        dom.shortButton.addEventListener('click', () => { showTradeConfirmationModal('short'); });
+        dom.saveTpButton.addEventListener('click', () => { handleManualSave('TP'); });
+        dom.saveSlButton.addEventListener('click', () => { handleManualSave('SL'); });
+        dom.useMarketPrice.addEventListener('click', handleMarketPriceClick);
+        dom.presetSlots.forEach(btn => btn.addEventListener('click', () => loadPreset(btn.dataset.slot)));
+        dom.savePreset.addEventListener('click', () => savePresetToDb(selectedPresetSlot));
+
+        dom.tradeSummaryCard.addEventListener('click', (e) => {
+            const copyRow = e.target.closest('.copyable-row');
+            if (copyRow) {
+                const valueEl = copyRow.querySelector('.value-to-copy');
+                if (valueEl && valueEl.textContent) copyToClipboard(valueEl.textContent, e);
+            }
+        });
+        dom.copyAllBtn.addEventListener('click', handleCopyAll);
+
+        dom.tradeHistoryContainer.addEventListener('click', (e) => {
+            const deleteButton = e.target.closest('.delete-trade-btn');
+            if(deleteButton) {
+                tradeToDelete = deleteButton.dataset.tradeId;
+                dom.deleteConfirmMessage.textContent = "คุณแน่ใจหรือไม่ว่าต้องการลบรายการเทรดนี้? การกระทำนี้ไม่สามารถย้อนกลับได้";
+                dom.deleteConfirmModal.classList.remove('hidden');
+            }
+        });
+        dom.cancelDelete.addEventListener('click', () => dom.deleteConfirmModal.classList.add('hidden'));
+        dom.confirmDelete.addEventListener('click', () => {
+            if(tradeToDelete === 'all') { // NEW: For clearing all history
+                clearAllTradeHistory();
+            } else if(tradeToDelete) {
+                deleteTradeFromDb(tradeToDelete);
+            }
+            dom.deleteConfirmModal.classList.add('hidden');
+            tradeToDelete = null;
+        });
+        dom.autoTradeStatusList.addEventListener('click', (e) => { // Modified: Check for SL->BE button
+            const cancelButton = e.target.closest('.cancel-auto-trade-btn');
+            const slToBeButton = e.target.closest('.sl-to-be-btn');
+            if (cancelButton) {
+                handleCloseActiveTrade(e);
+            } else if (slToBeButton) {
+                const tradeId = slToBeButton.dataset.id;
+                handleMoveSLToBreakEven(tradeId);
+            }
+        });
+        document.querySelectorAll('.tab-btn').forEach(button => button.addEventListener('click', handleTabClick));
+
+        dom.resetBalanceBtn.addEventListener('click', handleResetBalance);
+        dom.riskTabContent.addEventListener('click', handleEditableValueClick);
+
+        dom.cancelTrade.addEventListener('click', () => dom.tradeConfirmModal.classList.add('hidden'));
+        dom.confirmDemoTrade.addEventListener('click', () => {
+            armAutoTrade(state.tradeToConfirm.direction);
+            dom.tradeConfirmModal.classList.add('hidden');
+        });
+
+        dom.saveBinanceKeys.addEventListener('click', saveLocalSettings);
+        dom.saveDiscordUrl.addEventListener('click', saveLocalSettings);
+        dom.masterSwitch.addEventListener('change', handleMasterSwitchChange);
+        dom.screenerInfoIcon.addEventListener('mouseover', handleScreenerInfoHover);
+        dom.screenerInfoIcon.addEventListener('mouseout', hideInfoTooltip);
+
+        dom.riskPanelModeToggle.addEventListener('change', handleRiskPanelModeToggle);
+        dom.applyAdvisorSuggestionBtn.addEventListener('click', applyAdvisorSuggestion);
+        dom.volatilityAdjusterSwitch.addEventListener('change', handleVolatilityAdjusterChange);
+        dom.resetParamsBtn.addEventListener('click', handleResetParameters);
+        dom.planFromAlertBtn.addEventListener('click', handlePlanFromAlert);
+        dom.dismissAlertBtn.addEventListener('click', handleDismissAlert);
+        dom.clearHistoryBtn.addEventListener('click', () => { // NEW: Clear All History button
+            tradeToDelete = 'all';
+            dom.deleteConfirmMessage.textContent = "คุณแน่ใจหรือไม่ว่าต้องการลบประวัติการเทรดทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้";
+            dom.deleteConfirmModal.classList.remove('hidden');
+        });
+    }
+
+    // NEW: Function to handle Move SL to Break-even
+    async function handleMoveSLToBreakEven(tradeId) {
+        if (!teamId || !tradeId) return;
+        const trade = state.activeTrades[tradeId];
+        if (!trade) {
+            console.error("Trade not found for SL->BE:", tradeId);
+            return;
+        }
+
+        const currentPrice = state.lastPrices[trade.coin.symbol.toLowerCase()];
+        if (typeof currentPrice !== 'number' || currentPrice === 0) { 
+            alert(`ไม่สามารถเลื่อน SL ได้: ไม่พบราคาปัจจุบันสำหรับ ${trade.coin.symbol.toUpperCase()}`);
+            return;
+        }
+
+        const pnlPercentage = ((currentPrice - trade.entry) / trade.entry) * trade.lev;
+        const rawPnl = trade.initialMgn * pnlPercentage;
+        
+        if ((trade.direction === 'long' && rawPnl <= 0) || (trade.direction === 'short' && rawPnl >= 0)) {
+            alert("สถานะยังไม่เป็นกำไร ไม่สามารถเลื่อน SL ไปกันทุนได้");
+            return;
+        }
+
+        const estimatedSingleSideFee = trade.estFees ? (trade.estFees / 2) : (trade.initialMgn * FEE_RATE);
+        const entryPricePlusFees = (estimatedSingleSideFee / trade.initialMgn) * trade.entry;
+
+        const breakEvenPrice = trade.direction === 'long'
+            ? trade.entry + entryPricePlusFees + (trade.entry * BREAKEVEN_FEE_BUFFER)
+            : trade.entry - entryPricePlusFees - (trade.entry * BREAKEVEN_FEE_BUFFER);
+
+        let finalSLPrice = breakEvenPrice;
+        if (trade.direction === 'long' && finalSLPrice > currentPrice) {
+            finalSLPrice = currentPrice * (1 - 0.0001); 
+        } else if (trade.direction === 'short' && finalSLPrice < currentPrice) {
+            finalSLPrice = currentPrice * (1 + 0.0001); 
+        }
+
+        const tradeRef = doc(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/activeTrades/${tradeId}`);
+        try {
+            await updateDoc(tradeRef, {
+                slPrice: finalSLPrice,
+                slMovedToBe: true
+            });
+            alert(`Stop Loss ของ <span class="math-inline">\{trade\.coin\.symbol\.toUpperCase\(\)\} ถูกเลื่อนไปที่ราคาเท่าทุนแล้ว \(</span>{getPricePrecision(finalSLPrice)})`);
+            renderActiveTradesUI();
+        } catch (e) {
+            console.error("Failed to move SL to Break-even:", e);
+            alert("เกิดข้อผิดพลาดในการเลื่อน SL ไปกันทุน: " + e.message);
+        }
+    }
+
+    // NEW: Function to clear all trade history
+    async function clearAllTradeHistory() {
+        if (!teamId || isClearingHistory) return;
+        isClearingHistory = true;
+
+        const historyCollectionRef = collection(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/tradeHistory`);
+        const q = query(historyCollectionRef);
+        try {
+            const querySnapshot = await getDocs(q);
+            if (querySnapshot.empty) {
+                alert("ไม่มีประวัติการเทรดให้ลบ.");
+                isClearingHistory = false;
+                return;
+            }
+
+            const batch = writeBatch(db);
+            querySnapshot.forEach((doc) => {
+                batch.delete(doc.ref);
+            });
+            await batch.commit();
+            alert("ล้างประวัติการเทรดทั้งหมดเรียบร้อยแล้ว.");
+        } catch (e) {
+            console.error("Failed to clear all trade history:", e);
+            alert("เกิดข้อผิดพลาดในการล้างประวัติการเทรด: " + e.message);
+        } finally {
+            isClearingHistory = false;
+        }
+    }
+
+    // NEW HELPER: To programmatically show a tab
+    function showTab(tabName) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === tabName);
+        });
+        document.querySelectorAll('[data-tab-content]').forEach(content => {
+            content.classList.toggle('hidden', content.dataset.tabContent !== tabName);
+        });
+        if (tabName === 'execute') {
+            updateMarketScreener();
+        }
+    }
+
+    // NEW: Handlers for the Actionable Alert Modal
+    async function handleDismissAlert() {
+        if (!state.alertToPlan) return;
+        const alertId = state.alertToPlan.alertId;
+
+        // Update the alert status in Firestore
+        const alertRef = doc(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/priceAlerts/${alertId}`);
+        try {
+            await updateDoc(alertRef, { status: 'triggered' });
+        } catch (e) { console.error("Failed to update alert status:", e); }
+
+        // Hide modal and reset state
+        dom.priceAlertModal.classList.add('hidden');
+        state.isAlertModalOpen = false;
+        state.alertToPlan = null;
+    }
+
+    async function handlePlanFromAlert() {
+        if (!state.alertToPlan) return;
+        const { coinId, price, alertId } = state.alertToPlan;
+
+        // 1. Update the alert status so it doesn't trigger again
+        const alertRef = doc(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/priceAlerts/${alertId}`);
+        try {
+             await updateDoc(alertRef, { status: 'triggered' });
+        } catch (e) { console.error("Failed to update alert status:", e); }
+
+        // 2. Automate the UI
+        showTab('execute');
+        dom.coinSelect.value = coinId;
+        dom.entryPrice.value = getPricePrecision(price);
+
+        // Use a slight delay to ensure the new coin selection is processed before calculating
+        setTimeout(() => {
+            handleCoinSelection(coinId, false); // Pass flag to prevent smart price override
+            calculateAll();
+            dom.entryPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+
+        // 3. Hide modal and reset state
+        dom.priceAlertModal.classList.add('hidden');
+        state.isAlertModalOpen = false;
+        state.alertToPlan = null;
+    }
+
+    function handleDirectionChange(direction) {
+        if (state.currentTradeDirection === direction) return;
+        state.currentTradeDirection = direction;
+        dom.longDirBtn.classList.toggle('active', direction === 'long');
+        dom.shortDirBtn.classList.toggle('active', direction === 'short');
+        calculateAll();
+    }
+
+    function handleResetParameters() {
+        dom.riskPercentSlider.value = 1.0;
+        dom.stopLossPercentSlider.value = 1.0;
+        dom.leverageSlider.value = 20;
+        dom.riskRewardRatioSlider.value = 1.5;
+        state.userHasOverriddenSL = false;
+        calculateAll();
+    }
+
+    function handleRiskPanelModeToggle(e) {
+        state.isSimpleMode = e.target.checked;
+        localStorage.setItem(`${teamId}_risk_panel_simple_mode`, state.isSimpleMode);
+        updateRiskPanelModeUI();
+        calculateAll();
+    }
+
+    function updateRiskPanelModeUI() {
+        dom.riskPanelModeToggle.checked = state.isSimpleMode;
+
+        dom.stopLossPercentContainer.classList.toggle('hidden', state.isSimpleMode);
+        dom.leverageContainer.classList.toggle('hidden', state.isSimpleMode);
+        dom.rrFeasibilityGrade.classList.toggle('hidden', !state.isSimpleMode);
+
+        if (state.isSimpleMode) {
+            dom.stopLossPercentSlider.disabled = true;
+            dom.leverageSlider.disabled = true;
+        } else {
+            dom.stopLossPercentSlider.disabled = (state.systemState.mode === 'advanced') || state.isVolatilityAdjusterEnabled;
+            dom.leverageSlider.disabled = (state.systemState.mode === 'advanced');
+        }
+
+        dom.stopLossPercentContainer.classList.toggle('disabled', state.isSimpleMode || state.systemState.mode === 'advanced' || state.isVolatilityAdjusterEnabled);
+        dom.leverageContainer.classList.toggle('disabled', state.isSimpleMode || state.systemState.mode === 'advanced');
+
+        if (dom.volatilityAdjusterSwitch && dom.volatilityAdjusterContainer) {
+            const isDisabled = state.isSimpleMode;
+            dom.volatilityAdjusterSwitch.disabled = isDisabled;
+            dom.volatilityAdjusterContainer.classList.toggle('opacity-50', isDisabled);
+            dom.volatilityAdjusterContainer.title = isDisabled ? 'ถูกปิดใช้งานใน Simple Mode' : 'ปรับ Stop Loss อัตโนมัติตามความผันผวน';
+        }
+    }
+
+    function applyAdvisorSuggestion() {
+        if (state.advisorSuggestions.slP !== null) {
+            dom.stopLossPercentSlider.value = (state.advisorSuggestions.slP * 100).toFixed(1);
+            state.userHasOverriddenSL = true;
+            dom.stopLossPercentValue.classList.remove('text-brand-blue', 'font-bold');
+        }
+        if (state.advisorSuggestions.lev !== null) {
+            dom.leverageSlider.value = state.advisorSuggestions.lev;
+        }
+        state.advisorSuggestions = { slP: null, lev: null };
+        calculateAll();
+        dom.intelligentAdvisorMessage.classList.add('hidden');
+    }
+
+    function handleMasterSwitchChange(e) {
+        state.isIntelligentSystemEnabled = e.target.checked;
+        localStorage.setItem(`${teamId}_intelligent_system_enabled`, state.isIntelligentSystemEnabled);
+        updateIntelligentSystemUI();
+        alert(`Intelligent Assistant is now ${state.isIntelligentSystemEnabled ? 'ON' : 'OFF'}`);
+    }
+
+    function handleVolatilityAdjusterChange(e) {
+        state.isVolatilityAdjusterEnabled = e.target.checked;
+        state.userHasOverriddenSL = false;
+        localStorage.setItem(`${teamId}_volatility_adjuster_enabled`, state.isVolatilityAdjusterEnabled);
+        calculateAll();
+        updateIntelligentSystemUI();
+        alert(`Volatility Adjuster is now ${state.isVolatilityAdjusterEnabled ? 'ON' : 'OFF'}`);
+    }
+
+    function handleSystemModeChange(e) {
+        const newMode = e.target.value;
+        const baseRiskUnit = (state.systemState.mode === 'manual') ? parseFloat(dom.riskPercentSlider.value) / 100 : state.systemState.baseRiskUnit;
+        const newSystemState = { mode: newMode, step: 1, baseRiskUnit };
+        updateSystemStateInDb(newSystemState);
+    }
+
+    function handleResetBalance() {
+        dom.portfolioBalance.value = formatCurrency(DEFAULT_BALANCE, false, false);
+        updatePortfolioBalanceInDb();
+    }
+
+    function handleEditableValueClick(e) {
+        const targetSpan = e.target.closest('.editable-value');
+        if (!targetSpan || targetSpan.querySelector('input')) return;
+        const slider = dom[targetSpan.dataset.slider];
+        if (!slider || slider.disabled || (state.isSimpleMode && (slider.id === 'stopLossPercentSlider' || slider.id === 'leverageSlider'))) return;
+
+        if (slider.id === 'stopLossPercentSlider') {
+            state.userHasOverriddenSL = true;
+            targetSpan.classList.remove('text-brand-blue', 'font-bold');
+        }
+
+        const currentValue = parseFloat(slider.value);
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.className = 'inline-input';
+        input.value = currentValue;
+        input.step = slider.step;
+        input.min = slider.min;
+        input.max = slider.max;
+        targetSpan.innerHTML = '';
+        targetSpan.appendChild(input);
+        input.focus();
+        input.select();
+        const handleFinish = () => {
+            let newValue = Math.max(parseFloat(slider.min), Math.min(parseFloat(input.value), parseFloat(slider.max)));
+            if (isNaN(newValue)) { newValue = currentValue; }
+            slider.value = newValue;
+            if (slider.id === 'stopLossPercentSlider') {
+                state.userHasOverriddenSL = true;
+                targetSpan.classList.remove('text-brand-blue', 'font-bold');
+            }
+            calculateAll();
+            input.removeEventListener('blur', handleFinish);
+            input.removeEventListener('keydown', handleKeydown);
+        };
+        const handleKeydown = (event) => { if (event.key === 'Enter' || event.key === 'Escape') { event.preventDefault(); handleFinish(); } };
+        input.addEventListener('blur', handleFinish);
+        input.addEventListener('keydown', handleKeydown);
+    }
+
+    function handleTabClick(e) {
+        const clickedTab = e.currentTarget;
+        if (clickedTab.classList.contains('active')) return;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('[data-tab-content]').forEach(content => content.classList.add('hidden'));
+        const targetTab = clickedTab.dataset.tab;
+        clickedTab.classList.add('active');
+        document.querySelector(`[data-tab-content="${targetTab}"]`).classList.remove('hidden');
+
+        if (targetTab === 'execute') {
+            updateMarketScreener();
+        }
+    }
+
+    function handleMarketPriceClick() {
+        toggleMarketTracking(!isTrackingMarketPrice);
+        isUsingSmartPrice = false;
+        if (isTrackingMarketPrice) {
+            const currentSymbol = dom.coinSelect.options[dom.coinSelect.selectedIndex]?.dataset.symbol;
+            if(state.lastPrices[currentSymbol]){
+                 dom.entryPrice.value = getPricePrecision(state.lastPrices[currentSymbol]);
+                 calculateAll();
+            }
+        }
+    }
+
+    function handleCopyAll(e) {
+        const summaryText = `
+--- TRADE SUMMARY (${dom.summary.coin.textContent}) ---
+Mode: ${dom.summary.mode.textContent}
+Risk: ${dom.summary.risk.textContent} | Lev: ${dom.summary.leverage.textContent} | R:R: ${dom.summary.rr.textContent}
+Entry: ${dom.summary.entry.textContent}
+Margin: ${dom.summary.margin.textContent}
+TP: ${dom.summary.tp.textContent}
+SL: ${dom.summary.sl.textContent}
+        `.trim().replace(/^ +/gm, '');
+        copyToClipboard(summaryText, e);
+    }
+
+    async function handleCloseActiveTrade(e) {
+        const cancelButton = e.target.closest('.cancel-auto-trade-btn');
+        if (!cancelButton) return;
+        const tradeId = cancelButton.dataset.id;
+        if (!tradeId || !state.activeTrades[tradeId]) return;
+        const trade = state.activeTrades[tradeId];
+        const symbol = trade.coin.symbol.toLowerCase();
+        const currentPrice = state.lastPrices[symbol];
+        if (typeof currentPrice !== 'number' || currentPrice === 0) {
+            alert(`ไม่สามารถปิดได้: ไม่พบราคาปัจจุบันสำหรับ ${trade.coin.symbol.toUpperCase()}`); return;
+        }
+
+        if (isClosingTrade) {
+            console.warn("Already in the process of closing a trade. Please wait.");
+            return;
+        }
+        isClosingTrade = true;
+
+        const priceChange = currentPrice - trade.entry;
+        const pnlPercentage = (priceChange / trade.entry) * 100 * trade.lev;
+        const pnlAmount = trade.initialMgn * (pnlPercentage / 100);
+        const rawPnl = trade.direction === 'long' ? pnlAmount : -pnlAmount;
+        const netPnl = rawPnl - (trade.estFees || 0); 
+        const isProfit = netPnl >= 0;
+        const isAdvancedTrade = trade.isAdvanced || false;
+        const finalTrade = {
+            ...trade,
+            result: isAdvancedTrade ? 'Emergency Stop' : 'Manual Close',
+            profit: isProfit ? rawPnl : null,
+            loss: !isProfit ? -rawPnl : null,
+            netPnl,
+            timestamp: serverTimestamp(),
+            closePrice: currentPrice,
+        };
+        delete finalTrade.id; 
+
+        await saveCompletedTrade(finalTrade, tradeId, isAdvancedTrade);
+        isClosingTrade = false; 
+    }
+
+    async function handleManualSave(resultType) {
+        if (!teamId) return;
+        calculateAll();
+
+        if (state.systemState.mode === 'advanced') {
+            alert("Manual save is not applicable in Advanced mode for this demo.");
+            return;
+        }
+
+        const isProfit = resultType === 'TP';
+        const { profitAmt, lossAmt, estFees } = state.tradeCalculations;
+        const pnl = isProfit ? profitAmt : -lossAmt;
+        const netPnl = pnl - (estFees || 0);
+        const coinInfo = state.coinsData.find(c => c.id === dom.coinSelect.value);
+        if (!coinInfo) {
+            alert("โปรดเลือกเหรียญก่อนทำการบันทึก.");
+            return;
+        }
+        const newTrade = {
+            ...state.tradeCalculations,
+            coin: coinInfo,
+            direction: state.currentTradeDirection,
+            result: `Manual ${resultType}`,
+            profit: isProfit ? pnl : null,
+            loss: !isProfit ? -pnl : null,
+            fee: estFees, // Use estFees from calculations
+            netPnl: netPnl,
+            timestamp: serverTimestamp(),
+            systemMode: state.systemState.mode,
+            systemStep: state.systemState.step,
+            isAdvanced: false,
+            slMovedToBe: false 
+        };
+        await saveCompletedTrade(newTrade);
+    }
+
+    function calculateAll() {
+        if (!dom.portfolioBalance.value) return;
+        dom.autoAdjustNotification.classList.add('hidden');
+        calculateRiskAndExecution();
+        calculateAvailableBalance();
+        updateAllUI();
+    }
+
+    function calculateRiskAndExecution() {
+        const currentBalance = parseFloat(dom.portfolioBalance.value.replace(/,/g, '')) || 0;
+        const { mode, step, baseRiskUnit } = state.systemState;
+        const entry = parseFloat(dom.entryPrice.value) || 0;
+
+        let params = {
+            riskP: parseFloat(dom.riskPercentSlider.value) / 100,
+            slP: parseFloat(dom.stopLossPercentSlider.value) / 100,
+            lev: parseFloat(dom.leverageSlider.value),
+            rr: parseFloat(dom.riskRewardRatioSlider.value)
+        };
+
+        if (mode === 'advanced' && state.isIntelligentSystemEnabled) {
+            const config = ADVANCED_SYSTEM_CONFIG[step - 1] || ADVANCED_SYSTEM_CONFIG[0];
+            params.riskP = config.riskPercent;
+            params.slP = config.slPercent;
+            params.lev = config.leverage;
+            params.rr = config.rrRatio;
+            state.userHasOverriddenSL = false;
+        } else if (mode === '1326' && state.isIntelligentSystemEnabled) {
+            const multiplier = SYSTEM_1326_MULTIPLIERS[step - 1] || 1;
+            params.riskP = baseRiskUnit * multiplier;
+        }
+
+        const lossAmt = currentBalance * params.riskP;
+
+        if (mode === 'advanced' && state.isIntelligentSystemEnabled && entry > 0) {
+            const originalParams = { ...params };
+            let isViable = isTradeViable({ ...params, entry, lossAmt, availableBalance: state.availableBalance, direction: state.currentTradeDirection }) === 'viable';
+
+            if (!isViable) {
+                let adjusted = false;
+                for (let testLev = params.lev - 1; testLev >= 1; testLev--) {
+                    let tempParams = { ...params, lev: testLev };
+                    if (isTradeViable({ ...tempParams, entry, lossAmt, availableBalance: state.availableBalance, direction: state.currentTradeDirection }) === 'viable') {
+                        params.lev = testLev;
+                        adjusted = true;
+                        break;
+                    }
+                }
+                if (adjusted) {
+                    dom.autoAdjustMessage.textContent = `💡 ปรับเพื่อความปลอดภัย: ระบบได้ปรับลด Leverage จาก ${originalParams.lev}x เป็น ${params.lev}x อัตโนมัติ`;
+                    dom.autoAdjustNotification.classList.remove('hidden');
+                }
+            }
+        }
+
+        if (state.isIntelligentSystemEnabled && state.isVolatilityAdjusterEnabled && !state.userHasOverriddenSL && !state.isSimpleMode && mode !== 'advanced') {
+            const selectedCoinSymbol = dom.coinSelect.options[dom.coinSelect.selectedIndex]?.dataset.symbol;
+            const latestPrice = state.lastPrices[selectedCoinSymbol] || 0;
+            const atrValue = state.marketScreenerATR || 0;
+            let autoSLP = params.slP;
+
+            if (atrValue > 0 && latestPrice > 0) {
+                const atrPercentage = (atrValue / latestPrice);
+                if (atrPercentage * 100 > ATR_HIGH_VOL_FACTOR_PERCENT) {
+                    autoSLP = ATR_BASE_SL_PERCENT_ADJUSTED * ATR_ADJUST_FACTOR_HIGH;
+                } else if (atrPercentage * 100 < ATR_LOW_VOL_FACTOR_PERCENT) {
+                    autoSLP = ATR_BASE_SL_PERCENT_ADJUSTED * ATR_ADJUST_FACTOR_LOW;
+                } else {
+                    autoSLP = ATR_BASE_SL_PERCENT_ADJUSTED;
+                }
+            }
+            params.slP = Math.max(0.001, Math.min(0.05, autoSLP));
+        }
+
+        if (state.isSimpleMode && state.isIntelligentSystemEnabled) {
+            const targetLossAmount = currentBalance * params.riskP;
+            let optimalSLP = 0.01;
+            let optimalLeverage = 1;
+
+            if (entry === 0 || state.availableBalance <= 0) {
+                params.slP = optimalSLP;
+                params.lev = optimalLeverage;
+                dom.stopLossPercentSlider.value = (params.slP * 100).toFixed(1);
+                dom.leverageSlider.value = params.lev;
+                state.userHasOverriddenSL = false;
+                return;
+            }
+
+            let bestMarginFound = 0;
+            for (let testSLP = 0.001; testSLP <= 0.05; testSLP += 0.001) {
+                for (let testLev = 1; testLev <= 125; testLev++) {
+                    const calculatedInitialMgn = (testSLP * testLev === 0) ? Infinity : targetLossAmount / (testSLP * testLev);
+                    const slPriceForTest = (state.currentTradeDirection === 'long') ? entry * (1 - testSLP) : entry * (1 + testSLP);
+                    const isLiquidationSafe = checkLiquidationSafety(entry, slPriceForTest, testLev, state.currentTradeDirection);
+
+                    if (calculatedInitialMgn > state.availableBalance || !isLiquidationSafe) {
+                        continue;
+                    }
+
+                    if (bestMarginFound === 0 || (calculatedInitialMgn <= targetLossAmount && calculatedInitialMgn > bestMarginFound)) {
+                        optimalSLP = testSLP;
+                        optimalLeverage = testLev;
+                        bestMarginFound = calculatedInitialMgn;
+                    } else if (calculatedInitialMgn > targetLossAmount && calculatedInitialMgn < state.availableBalance && (bestMarginFound <= targetLossAmount || calculatedInitialMgn < bestMarginFound)) {
+                        optimalSLP = testSLP;
+                        optimalLeverage = testLev;
+                        bestMarginFound = calculatedInitialMgn;
+                    }
+                }
+            }
+
+            params.slP = optimalSLP;
+            params.lev = optimalLeverage;
+
+            if (params.slP === 0 || params.lev === 0 || isNaN(params.slP) || isNaN(params.lev)) {
+                params.slP = 0.01;
+                params.lev = 1;
+            }
+
+            dom.stopLossPercentSlider.value = (params.slP * 100).toFixed(1);
+            dom.leverageSlider.value = params.lev;
+            state.userHasOverriddenSL = false;
+        }
+
+        const initialMgn = (params.slP > 0 && params.lev > 0) ? (lossAmt / (params.slP * params.lev)) : 0;
+        const profitAmt = lossAmt * params.rr;
+        let tpPrice = 0, slPrice = 0, breakEven = 0, estFees = 0;
+
+        if (entry > 0) {
+            const tpP = params.slP * params.rr;
+            const direction = state.currentTradeDirection;
+            if(direction === 'long') {
+                tpPrice = entry * (1 + tpP); slPrice = entry * (1 - params.slP);
+                breakEven = entry * (1 + (FEE_RATE / params.lev));
+            } else {
+                tpPrice = entry * (1 - tpP); slPrice = entry * (1 + params.slP);
+                breakEven = entry * (1 - (FEE_RATE / params.lev));
+            }
+            estFees = initialMgn * FEE_RATE * 2;
+        }
+        const liqPrice = calculateLiquidationPrice(entry, params.lev, state.currentTradeDirection);
+        state.tradeCalculations = { ...params, lossAmt, profitAmt, initialMgn, entry, tpPrice, slPrice, breakEven, estFees, liqPrice };
+    }
+
+    function calculateAvailableBalance() {
+        const totalMarginInUse = Object.values(state.activeTrades).reduce((sum, trade) => sum + (trade.initialMgn || 0), 0);
+        const currentBalance = parseFloat(dom.portfolioBalance.value.replace(/,/g, '')) || 0;
+        state.availableBalance = currentBalance - totalMarginInUse;
+    }
+
+    function updateAllUI() {
+        updateSystemUI();
+        updateSliderDisplay();
+        updateProjectedBalancesUI();
+        updateAvailableBalanceUI();
+        updateTradeSummaryCard();
+        updateExecuteButtonState();
+        updateManualSaveButtons();
+        renderActiveTradesUI();
+        updateRiskPanelModeUI();
+        updateRRFeasibilityGrade();
+
+        const hasActiveTrades = Object.keys(state.activeTrades).length > 0;
+        dom.portfolioBalance.readOnly = hasActiveTrades;
+        dom.resetBalanceBtn.disabled = hasActiveTrades;
+
+        lucide.createIcons();
+    }
+
+    function updateSystemUI() {
+        const { mode } = state.systemState;
+        dom.systemModeSelect.value = mode;
+
+        const slValueSpan = dom.stopLossPercentValue;
+        if (state.isIntelligentSystemEnabled && state.isVolatilityAdjusterEnabled && !state.userHasOverriddenSL && !state.isSimpleMode && mode !== 'advanced') {
+            slValueSpan.classList.add('text-brand-blue', 'font-bold');
+        } else {
+            slValueSpan.classList.remove('text-brand-blue', 'font-bold');
+        }
+
+        const isManual = mode === 'manual';
+        dom.riskPercentContainer.classList.toggle('disabled', !isManual && !state.isSimpleMode);
+        dom.riskPercentSlider.disabled = !isManual && !state.isSimpleMode;
+
+        dom.stopLossPercentContainer.classList.toggle('disabled', state.isSimpleMode || mode === 'advanced' || state.isVolatilityAdjusterEnabled);
+        dom.stopLossPercentSlider.disabled = state.isSimpleMode || mode === 'advanced' || state.isVolatilityAdjusterEnabled;
+
+        dom.leverageContainer.classList.toggle('disabled', state.isSimpleMode || mode === 'advanced');
+        dom.leverageSlider.disabled = state.isSimpleMode || mode === 'advanced';
+
+        dom.riskRewardRatioContainer.classList.toggle('disabled', mode === 'advanced');
+        dom.riskRewardRatioSlider.disabled = mode === 'advanced';
+
+        const { step } = state.systemState;
+        const statusMap = {
+            manual: 'Manual mode is active. You have full control.',
+            '1326': `1-3-2-6 System is active (Step <span class="math-inline">\{step\}/</span>{SYSTEM_1326_MULTIPLIERS.length}).`,
+            'advanced': `Advanced Recommendation is active (Step <span class="math-inline">\{step\}/</span>{ADVANCED_SYSTEM_CONFIG.length}).`
+        };
+        dom.systemStatusText.textContent = statusMap[mode];
+    }
+
+    function updateSliderDisplay() {
+        if(!state.tradeCalculations.riskP) return;
+        const { riskP, slP, lev, rr, lossAmt } = state.tradeCalculations;
+
+        const riskPercentFill = ((parseFloat(dom.riskPercentSlider.value) - parseFloat(dom.riskPercentSlider.min)) / (parseFloat(dom.riskPercentSlider.max) - parseFloat(dom.riskPercentSlider.min))) * 100;
+        const stopLossPercentFill = ((parseFloat(dom.stopLossPercentSlider.value) - parseFloat(dom.stopLossPercentSlider.min)) / (parseFloat(dom.stopLossPercentSlider.max) - parseFloat(dom.stopLossPercentSlider.min))) * 100;
+        const leverageFill = ((parseFloat(dom.leverageSlider.value) - parseFloat(dom.leverageSlider.min)) / (parseFloat(dom.leverageSlider.max) - parseFloat(dom.leverageSlider.min))) * 100;
+        const riskRewardRatioFill = ((parseFloat(dom.riskRewardRatioSlider.value) - parseFloat(dom.riskRewardRatioSlider.min)) / (parseFloat(dom.riskRewardRatioSlider.max) - parseFloat(dom.riskRewardRatioSlider.min))) * 100;
+
+        dom.riskPercentSlider.style.backgroundImage = `linear-gradient(to right, var(--brand-blue) ${riskPercentFill}%, var(--slider-track-color) ${riskPercentFill}%)`;
+        dom.stopLossPercentSlider.style.backgroundImage = `linear-gradient(to right, var(--brand-blue) ${stopLossPercentFill}%, var(--slider-track-color) ${stopLossPercentFill}%)`;
+        dom.leverageSlider.style.backgroundImage = `linear-gradient(to right, var(--brand-blue) ${leverageFill}%, var(--slider-track-color) ${leverageFill}%)`;
+        dom.riskRewardRatioSlider.style.backgroundImage = `linear-gradient(to right, var(--brand-blue) ${riskRewardRatioFill}%, var(--slider-track-color) ${riskRewardRatioFill}%)`;
+
+        if (document.activeElement.type !== 'range' && !document.activeElement.classList.contains('inline-input')) {
+            dom.riskPercentSlider.value = (riskP * 100).toFixed(1);
+            dom.stopLossPercentSlider.value = (slP * 100).toFixed(1);
+            dom.leverageSlider.value = lev;
+            dom.riskRewardRatioSlider.value = rr.toFixed(1);
+        }
+
+        const elementsToAnimate = [ dom.riskPercentValue, dom.riskAmountValue, dom.stopLossPercentValue, dom.leverageValue, dom.riskRewardRatioValue ];
+        elementsToAnimate.forEach(el => { el.classList.remove('value-pop'); void el.offsetWidth; el.classList.add('value-pop'); });
+
+        dom.riskPercentValue.textContent = `${(riskP * 100).toFixed(1)}%`;
+        dom.stopLossPercentValue.textContent = `${(slP * 100).toFixed(1)}%`;
+        dom.leverageValue.textContent = `${lev}x`;
+        dom.riskRewardRatioValue.textContent = `1 : ${rr.toFixed(1)}`;
+        dom.riskAmountValue.textContent = `(${formatCurrency(lossAmt)})`;
+        dom.rrProfitBar.style.flexGrow = rr || 1;
+    }
+
+    function updateProjectedBalancesUI() {
+        const currentBalance = parseFloat(dom.portfolioBalance.value.replace(/,/g, '')) || 0;
+        const { profitAmt, lossAmt } = state.tradeCalculations;
+
+        dom.projectedTp.textContent = formatCurrency(currentBalance + (profitAmt || 0));
+        dom.projectedSl.textContent = formatCurrency(currentBalance - (lossAmt || 0));
+
+        dom.projectedTp.classList.remove('value-pop'); void dom.projectedTp.offsetWidth; dom.projectedTp.classList.add('value-pop');
+        dom.projectedSl.classList.remove('value-pop'); void dom.projectedSl.offsetWidth; dom.projectedSl.classList.add('value-pop');
+    }
+
+    function updateAvailableBalanceUI() { dom.availableBalance.value = formatCurrency(state.availableBalance, false, false); }
+    function updateManualSaveButtons() {
+        const { profitAmt, lossAmt, estFees } = state.tradeCalculations;
+        dom.saveTpButton.textContent = `Save (TP) ${formatCurrency((profitAmt || 0) - (estFees || 0), true)}`;
+        dom.saveSlButton.textContent = `Save (SL) ${formatCurrency(-((lossAmt || 0) + (estFees || 0)), true)}`;
+    }
+
+    function updateTradeSummaryCard() {
+        if(!state.tradeCalculations.riskP) return;
+        const { riskP, slP, lev, rr, entry, initialMgn, tpPrice, slPrice, lossAmt, profitAmt, liqPrice } = state.tradeCalculations;
+        const { mode, step } = state.systemState;
+        const coin = state.coinsData.find(c => c.id === dom.coinSelect.value);
+        const isSimple = state.isSimpleMode;
+
+        let modeDisplay = mode.charAt(0).toUpperCase() + mode.slice(1);
+        if (mode !== 'manual') modeDisplay += ` (S${step})`;
+        if (isSimple) modeDisplay += ` (Simple)`;
+
+        dom.summary.mode.textContent = modeDisplay;
+        dom.summary.coin.textContent = coin ? coin.symbol.toUpperCase() : '...';
+        dom.summary.risk.textContent = `<span class="math-inline">\{\(riskP \* 100\)\.toFixed\(1\)\}% \(</span>{formatCurrency(lossAmt)})`;
+        dom.summary.leverage.innerHTML = `${lev}x ${isSimple ? '<span class="auto-indicator">(Auto)</span>' : ''}`;
+        dom.summary.slPercent.innerHTML = `${(slP * 100).toFixed(2)}% ${isSimple ? '<span class="auto-indicator">(Auto)</span>' : ''}`;
+        dom.summary.rr.textContent = `1 : ${rr.toFixed(1)}`;
+        dom.summary.entry.textContent = getPricePrecision(entry);
+        dom.summary.margin.textContent = formatCurrency(initialMgn, false);
+        dom.summary.tp.textContent = getPricePrecision(tpPrice);
+        dom.summary.tpPl.textContent = `(${formatCurrency(profitAmt, true)})`;
+        dom.summary.sl.textContent = getPricePrecision(slPrice);
+        dom.summary.slPl.textContent = `(${formatCurrency(-lossAmt, true)})`;
+        dom.summary.liqPrice.textContent = getPricePrecision(liqPrice);
+    }
+
+    // MODIFIED: updateExecuteButtonState logic
+    function updateExecuteButtonState() {
+        if(!state.tradeCalculations.initialMgn) return;
+        const { initialMgn, entry } = state.tradeCalculations;
+        const isReady = (initialMgn || 0) > 0 && entry > 0;
+
+        const viability = isTradeViable({ ...state.tradeCalculations, availableBalance: state.availableBalance, direction: state.currentTradeDirection });
+        let isDisabled = !isReady || (state.isIntelligentSystemEnabled && viability !== 'viable');
+        let advisorReason = state.isIntelligentSystemEnabled ? viability : null;
+
+        // Dynamic Button Logic
+        const screenerCondition = state.marketScreenerStatus?.condition;
+        dom.longButton.classList.remove('btn-caution-glow');
+        dom.shortButton.classList.remove('btn-caution-glow');
+
+        if (screenerCondition === 'high-risk') {
+            isDisabled = true;
+            dom.longButton.title = "Trading is not recommended in this market condition.";
+            dom.shortButton.title = "Trading is not recommended in this market condition.";
+        } else if (screenerCondition === 'caution') {
+            dom.longButton.classList.add('btn-caution-glow');
+            dom.shortButton.classList.add('btn-caution-glow');
+            dom.longButton.title = "Caution: Market is choppy. Trade with care.";
+            dom.shortButton.title = "Caution: Market is choppy. Trade with care.";
+        } else {
+             dom.longButton.title = "Execute a LONG trade.";
+             dom.shortButton.title = "Execute a SHORT trade.";
+        }
+
+        dom.longButton.disabled = isDisabled;
+        dom.shortButton.disabled = isDisabled;
+        dom.saveTpButton.disabled = !isReady; // Manual save should always be possible if ready
+        dom.saveSlButton.disabled = !isReady;
+
+        const currentTab = document.querySelector('.tab-btn.active').dataset.tab;
+        if ((currentTab === 'execute' || currentTab === 'risk') && state.systemState.mode !== 'advanced') {
+            updateIntelligentAdvisorMessage(advisorReason);
+        } else {
+            updateIntelligentAdvisorMessage(null);
+        }
+    }
+
+    function showTradeConfirmationModal(direction) {
+        state.currentTradeDirection = direction;
+        // NEW FIX: Only show modal if buttons are not disabled by safety checks
+        if (dom.longButton.disabled && direction === 'long') return;
+        if (dom.shortButton.disabled && direction === 'short') return;
+
+        calculateAll(); // Recalculate just before showing to ensure latest numbers
+
+        if (state.tradeCalculations.entry <= 0 || (state.tradeCalculations.initialMgn || 0) <= 0) {
+            alert("ไม่สามารถดำเนินการเทรดได้ ตรวจสอบ Entry Price หรือ Risk Parameters");
+            return;
+        }
+
+        const coinInfo = state.coinsData.find(c => c.id === dom.coinSelect.value);
+        if (!coinInfo) {
+            alert("โปรดเลือกเหรียญก่อนทำการยืนยันเทรด");
+            return;
+        }
+        state.tradeToConfirm = { direction };
+        dom.tradeConfirmTitle.innerHTML = `Confirm <span class="<span class="math-inline">\{direction \=\=\= 'long' ? 'text\-profit' \: 'text\-loss'\}"\></span>{direction.toUpperCase()}</span> Trade`;
+        dom.tradeConfirmDetails.innerHTML = `
+            <div class="flex justify-between"><span>Coin:</span> <span class="font-bold"><span class="math-inline">\{coinInfo\.symbol\.toUpperCase\(\)\}</span\></div\>
+<div class\="flex justify\-between"\><span\>Entry\:</span\> <span class\="font\-bold"\></span>{getPricePrecision(state.tradeCalculations.entry)}</span></div>
+            <div class="flex justify-between"><span>Margin:</span> <span class="font-bold"><span class="math-inline">\{formatCurrency\(state\.tradeCalculations\.initialMgn, false\)\}</span\></div\>
+<div class\="flex justify\-between"\><span\>Mode\:</span\> <span class\="font\-bold"\></span>{state.systemState.mode} (Step ${state.systemState.step})</span></div>
+        `;
+        dom.tradeConfirmModal.classList.remove('hidden');
+    }
+
+    function renderActiveTradesUI() {
+        dom.autoTradeStatusList.innerHTML = '';
+        dom.autoTradeStatusContainer.classList.toggle('hidden', Object.keys(state.activeTrades).length === 0);
+        for(const tradeId in state.activeTrades) {
+            const trade = state.activeTrades[tradeId];
+            const el = document.createElement('div');
+            el.className = 'flex items-center justify-between p-3 rounded-lg bg-white/5 gap-3';
+            const coin = trade.coin || {};
+
+            const currentPrice = state.lastPrices[coin.symbol.toLowerCase()];
+            let isProfit = false;
+            if (typeof currentPrice === 'number' && currentPrice !== 0) {
+                const priceChange = currentPrice - trade.entry;
+                const pnlPercentage = (priceChange / trade.entry) * trade.lev;
+                const rawPnl = trade.initialMgn * pnlPercentage;
+                isProfit = trade.direction === 'long' ? rawPnl > 0 : -rawPnl > 0;
+            }
+
+            const tpPriceDisplay = typeof trade.tpPrice === 'number' && trade.tpPrice !== 0 ? getPricePrecision(trade.tpPrice) : '...';
+            const slPriceDisplay = typeof trade.slPrice === 'number' && trade.slPrice !== 0 ? getPricePrecision(trade.slPrice) : '...';
+
+            const slToBeButtonHtml = isProfit && !trade.slMovedToBe ?
+                `<button data-id="${tradeId}" class="sl-to-be-btn text-brand-blue hover:text-white p-1 rounded-full hover:bg-brand-blue/10 shrink-0 text-xs font-semibold px-2 py-1">SL→BE</button>` : '';
+
+            el.innerHTML = `
+                <div class="flex items-center gap-3 flex-grow">
+                    <img src="<span class="math-inline">\{coin\.iconUrl\}" alt\="</span>{coin.name}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='<span class="math-inline">\{coin\.image\}'"\>
+<div\>
+<p class\="font\-bold text\-sm"\></span>{coin.symbol?.toUpperCase()}</p>
+                        <p class="text-xs <span class="math-inline">\{trade\.direction \=\=\= 'long' ? 'text\-profit' \: 'text\-loss'\} font\-semibold"\></span>{trade.direction.toUpperCase()}</p>
+                    </div>
+                </div>
+                <div class="text-xs text-right shrink-0">
+                    <p id="realtime-pl-<span class="math-inline">\{tradeId\}" class\="font\-mono text\-lg mb\-1"\>\.\.\.</p\>
+<p\><span class\="text\-gray\-400"\>TP\: </span\><span class\="font\-mono text\-profit"\></span>{tpPriceDisplay}</span></p>
+                    <p><span class="text-gray-400">SL: </span><span class="font-mono text-loss">${slPriceDisplay}</span></p>
+                </div>
+                <span class="math-inline">\{slToBeButtonHtml\}
+<button data\-id\="</span>{tradeId}" class="cancel-auto-trade-btn text-gray-500 hover:text-red-400 p-1 rounded-full hover:bg-red-500/10 shrink-0">
+                    <i class="h-5 w-5 pointer-events-none" data-lucide="x-circle"></i>
+                </button>`;
+            dom.autoTradeStatusList.appendChild(el);
+        }
+        lucide.createIcons();
+    }
+
+    function renderTradeHistory(trades) {
+        dom.tradeHistoryContainer.innerHTML = '';
+        dom.emptyState.classList.toggle('hidden', trades.length === 0);
+        dom.clearHistoryBtn.classList.toggle('hidden', trades.length === 0); // NEW: Hide Clear All button if no history
+        trades.forEach(trade => {
+            const isProfit = trade.netPnl >= 0;
+            const el = document.createElement('div');
+            el.className = 'fade-in flex items-center justify-between p-3 rounded-lg bg-white/5';
+            const timestamp = trade.timestamp?.toDate ? trade.timestamp.toDate() : new Date();
+
+            let systemBadge = '';
+            if (trade.systemMode && trade.systemMode !== 'manual') {
+                const modeDisplay = trade.systemMode === '1326' ? '1-3-2-6' : 'Adv.';
+                systemBadge = `<span class="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-blue/20 text-brand-blue"><span class="math-inline">\{modeDisplay\} \(S</span>{trade.systemStep})</span>`;
+            }
+            const coin = trade.coin || {};
+            el.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <img src="<span class="math-inline">\{coin\.iconUrl\}" alt\="</span>{coin.name}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='<span class="math-inline">\{coin\.image\}'"\>
+<div\>
+<p class\="font\-bold text\-sm"\></span>{coin.name || 'N/A'} <span class="text-xs text-gray-400 font-normal"><span class="math-inline">\{coin\.symbol?\.toUpperCase\(\)\}</span\></span>{systemBadge}</p>
+                        <p class="text-xs text-gray-400">${timestamp.toLocaleString('th-TH')}</p>
+                    </div>
+                </div>
+                <div class="text-right flex items-center gap-4">
+                    <p class="font-mono text-base <span class="math-inline">\{isProfit ? 'text\-profit' \: 'text\-loss'\}"\></span>{formatCurrency(trade.netPnl, true)}</p>
+                    <button data-trade-id="${trade.id}" class="delete-trade-btn text-gray-600 hover:text-red-400 p-1.5 rounded-full hover:bg-red-500/10 transition-colors">
+                        <i data-lucide="trash-2" class="h-4 w-4 pointer-events-none"></i>
+                    </button>
+                </div>`;
+            dom.tradeHistoryContainer.appendChild(el);
+        });
+        lucide.createIcons();
+    }
+
+    function renderActiveAlerts(alerts) {
+        dom.activeAlertsList.innerHTML = '';
+        const activeAlerts = Object.values(alerts).filter(alert => alert.status === 'active');
+
+        dom.activeAlertsContainer.classList.toggle('hidden', activeAlerts.length === 0);
+
+        if (activeAlerts.length === 0) {
+            dom.activeAlertsList.innerHTML = '<p class="text-gray-500 text-sm text-center">ไม่มีการแจ้งเตือนที่เปิดใช้งานอยู่</p>';
+            return;
+        }
+
+        activeAlerts.forEach(alert => {
+            const el = document.createElement('div');
+            el.className = 'flex items-center justify-between p-3 rounded-lg bg-white/5 gap-3 fade-in';
+            const coin = alert.coin || {};
+            const conditionText = alert.condition === 'gte' ? '>= (ขึ้นถึง)' : '<= (ลงถึง)';
+            const priceDisplay = getPricePrecision(alert.targetPrice);
+
+            el.innerHTML = `
+                <div class="flex items-center gap-3 flex-grow">
+                    <img src="<span class="math-inline">\{coin\.iconUrl\}" alt\="</span>{coin.name}" class="w-7 h-7 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='<span class="math-inline">\{coin\.image\}'"\>
+<div\>
+<p class\="font\-bold text\-sm"\></span>{coin.symbol?.toUpperCase()}</p>
+                        <p class="text-xs text-gray-400">เมื่อ ${conditionText} <span class="math-inline">\{priceDisplay\}</p\>
+</div\>
+</div\>
+<button data\-alert\-id\="</span>{alert.id}" class="delete-alert-btn text-gray-500 hover:text-red-400 p-1 rounded-full hover:bg-red-500/10 shrink-0">
+                    <i class="h-4 w-4 pointer-events-none" data-lucide="x-circle"></i>
+                </button>
+            `;
+            dom.activeAlertsList.appendChild(el);
+        });
+        lucide.createIcons();
+
+        dom.activeAlertsList.querySelectorAll('.delete-alert-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const alertId = e.currentTarget.dataset.alertId;
+                if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบการแจ้งเตือนนี้?')) {
+                    deletePriceAlert(alertId);
+                }
+            });
+        });
+    }
+
+    // V4.22 FIX: Corrected the order of .filter and new Map()
+    function renderRecentCoins(trades) {
+        const recentUniqueCoins = [...new Map(trades.map(t => t.coin?.id && [t.coin.id, t.coin]).filter(Boolean)).values()].slice(0, 3);
+        dom.recentCoinsContainer.innerHTML = '';
+        if(recentUniqueCoins.length > 0) {
+             const label = document.createElement('span'); label.className = 'text-xs text-gray-400'; label.textContent = 'ล่าสุด:';
+             dom.recentCoinsContainer.appendChild(label);
+        }
+        recentUniqueCoins.forEach(coin => {
+            if(!coin) return;
+            const button = document.createElement('button');
+            button.className = 'btn btn-secondary !p-2 !text-xs';
+            button.textContent = coin.symbol.toUpperCase();
+            button.onclick = () => { dom.coinSelect.value = coin.id; handleCoinSelection(coin.id); };
+            dom.recentCoinsContainer.appendChild(button);
+        });
+    }
+
+    function calculateAndRenderLiveStats(trades) {
+        const totalTrades = trades.length;
+        const wins = trades.filter(t => t.netPnl >= 0).length;
+        const winRate = totalTrades > 0 ? (wins / totalTrades * 100).toFixed(1) : 0;
+        const netPl = trades.reduce((acc, trade) => acc + (trade.netPnl || 0), 0);
+        dom.liveStatsPl.textContent = formatCurrency(netPl, true);
+        dom.liveStatsPl.className = `text-lg font-bold ${netPl >= 0 ? 'text-profit' : 'text-loss'}`;
+        dom.liveStatsWinRate.textContent = `${winRate}%`;
+        dom.liveStatsTotal.textContent = totalTrades;
+    }
+
+    async function armAutoTrade(direction) {
+        if (!teamId) return;
+        calculateAll();
+
+        const { initialMgn, entry } = state.tradeCalculations;
+        if (entry <= 0 || (initialMgn || 0) <= 0) {
+            alert("ไม่สามารถดำเนินการเทรดได้ ตรวจสอบ Entry Price หรือ Risk Parameters");
+            return;
+        }
+
+        const coinInfo = state.coinsData.find(c => c.id === dom.coinSelect.value);
+        if (!coinInfo) {
+            alert("โปรดเลือกเหรียญก่อนทำการยืนยันเทรด");
+            return;
+        }
+        const tradeToSave = {
+            ...state.tradeCalculations, direction: state.currentTradeDirection, coin: coinInfo,
+            timestamp: serverTimestamp(), systemMode: state.systemState.mode, systemStep: state.systemState.step,
+            isAdvanced: (state.systemState.mode === 'advanced'),
+            slMovedToBe: false
+        };
+        const activeTradesCollection = collection(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/activeTrades`);
+        try {
+            await addDoc(activeTradesCollection, tradeToSave);
+            console.log("Trade armed successfully:", tradeToSave); // NEW FIX: Log success
+            // Optional: Show a temporary success message to user
+        } catch(e) {
+            console.error("Failed to arm auto-trade:", e);
+            alert("เกิดข้อผิดพลาดในการเปิดไม้เทรดอัตโนมัติ: " + e.message); // NEW FIX: User feedback
+        }
+    }
+
+    async function setPriceAlert() {
+        if (!teamId) { alert("กรุณาใส่ Team ID ก่อนตั้งค่าการแจ้งเตือน."); return; }
+        const coinId = dom.alertCoinSelect.value;
+        const targetPrice = parseFloat(dom.alertTargetPrice.value);
+        const condition = dom.alertCondition.value;
+
+        if (!coinId || isNaN(targetPrice) || targetPrice <= 0) {
+            alert("กรุณากรอกข้อมูลเหรียญและราคาเป้าหมายให้ถูกต้อง."); return;
+        }
+        const coinInfo = state.coinsData.find(c => c.id === coinId);
+        if (!coinInfo) { alert("ไม่พบข้อมูลเหรียญที่เลือก."); return; }
+
+        const newAlert = {
+            coin: coinInfo, targetPrice: targetPrice, condition: condition,
+            status: 'active', createdAt: serverTimestamp(), createdBy: auth.currentUser.uid,
+        };
+        try {
+            const alertsCollection = collection(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/priceAlerts`);
+            await addDoc(alertsCollection, newAlert);
+            alert(`ตั้งค่าการแจ้งเตือนสำหรับ ${coinInfo.symbol.toUpperCase()} เรียบร้อยแล้ว!`);
+            dom.alertTargetPrice.value = '';
+        } catch (e) {
+            console.error("Failed to set price alert:", e);
+            alert("เกิดข้อผิดพลาดในการตั้งค่าการแจ้งเตือน: " + e.message);
+        }
+    }
+
+    async function deletePriceAlert(alertId) {
+        if (!teamId || !alertId) return;
+        try {
+            const alertRef = doc(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/priceAlerts/${alertId}`);
+            await deleteDoc(alertRef);
+        } catch(e) { console.error("Failed to delete alert:", e); }
+    }
+
+    async function saveCompletedTrade(tradeData, originatingTradeId = null, forceReset = false) {
+        if (!teamId) return;
+        // NEW FIX: Ensure tradeData.netPnl is a number
+        tradeData.netPnl = typeof tradeData.netPnl === 'number' ? tradeData.netPnl : 0;
+
+        const isWin = tradeData.netPnl >= 0;
+        let nextSystemState = { ...state.systemState };
+
+        if (tradeData.systemMode === '1326') {
+            const maxSteps = SYSTEM_1326_MULTIPLIERS.length;
+            nextSystemState.step = isWin ? (state.systemState.step < maxSteps ? state.systemState.step + 1 : 1) : 1;
+        } else if (tradeData.systemMode === 'advanced') {
+            if (!isWin || forceReset) { nextSystemState.step = 1; }
+            else { nextSystemState.step = state.systemState.step < ADVANCED_SYSTEM_CONFIG.length ? state.systemState.step + 1 : 1; }
+        }
+
+        const newBalance = (state.settings.portfolioBalance || 0) + tradeData.netPnl;
+        const batch = writeBatch(db);
+        const basePath = `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}`;
+
+        batch.set(doc(collection(db, `${basePath}/tradeHistory`)), tradeData);
+
+        batch.update(doc(db, `${basePath}/settings`, 'main'), { portfolioBalance: newBalance });
+
+        if (tradeData.systemMode !== 'manual') {
+            batch.set(doc(db, `${basePath}/system`, 'state'), nextSystemState, { merge: true });
+        }
+        if(originatingTradeId) {
+            const activeTradeRef = doc(db, `<span class="math-inline">\{basePath\}/activeTrades/</span>{originatingTradeId}`);
+            batch.delete(activeTradeRef);
+            console.log(`Attempting to delete active trade: ${originatingTradeId}`);
+        }
+        try {
+            await batch.commit();
+            console.log("Trade completed and moved to history:", tradeData); 
+            callSendDiscordNotificationFunction({ ...tradeData, status: 'Closed' });
+        } catch (e) {
+            console.error("Failed to complete trade transaction:", e);
+            alert("เกิดข้อผิดพลาดในการบันทึกเทรด: " + e.message); 
+        }
+    }
+
+    async function updatePortfolioBalanceInDb() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(async () => {
+            if (!teamId) return;
+            const newBalance = parseFloat(dom.portfolioBalance.value.replace(/,/g, '')) || 0;
+            const settingsRef = doc(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/settings`, 'main');
+            try { await setDoc(settingsRef, { portfolioBalance: newBalance }, { merge: true }); }
+            catch(e) { console.error("Failed to update portfolio balance:", e); }
+        }, 500);
+    }
+
+    async function updateSystemStateInDb(newState) {
+        if (!teamId) return;
+        const systemStateRef = doc(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/system`, 'state');
+        try { await setDoc(systemStateRef, newState, { merge: true }); }
+        catch (e) { console.error("Failed to update system state:", e); }
+    }
+
+    async function savePresetToDb(slot) {
+        if (!teamId) return;
+        const presetData = {
+            riskP: dom.riskPercentSlider.value, slP: dom.stopLossPercentSlider.value,
+            lev: dom.leverageSlider.value, rr: dom.riskRewardRatioSlider.value,
+            isSimpleMode: state.isSimpleMode,
+        };
+        const presetRef = doc(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/presets/slot${slot}`);
+        try {
+            await setDoc(presetRef, presetData);
+            dom.savePreset.classList.add('bg-green-500', 'text-white');
+            setTimeout(() => dom.savePreset.classList.remove('bg-green-500', 'text-white'), 1000);
+        } catch(e) { console.error("Failed to save preset:", e); }
+    }
+
+    async function deleteTradeFromDb(tradeId) {
+         if (!teamId || !tradeId) return;
+         const tradeRef = doc(db, `artifacts/<span class="math-inline">\{appId\}/public/data/teams/</span>{teamId}/tradeHistory/${tradeId}`);
+         try { await deleteDoc(tradeRef); } catch(e) { console.error("Failed to delete trade:", e); }
+    }
+
+    async function fetchCoinsFromCoinGecko() {
+        try {
+            const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false');
+            const rawCoins = await response.json();
+            state.coinsData = rawCoins.map(c => ({
+                id: c.id, name: c.name, symbol: c.symbol, image: c.image,
+                iconUrl: `https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@main/svg/color/${c.symbol.toLowerCase()}.svg`,
+            }));
+            populateCoinSelect();
+        } catch (error) { console.error("Could not fetch coins:", error); }
+    }
+
+    function manageWebSocket(symbol) {
+        if (webSocketConnections[symbol] && webSocketConnections[symbol].readyState < 2) {
+            webSocketConnections[symbol].close();
+            delete webSocketConnections[symbol];
+        }
+
+        const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}usdt@trade`);
+        webSocketConnections[symbol] = ws;
+
+        ws.onmessage = (event) => {
+            const newPrice = parseFloat(JSON.parse(event.data).p);
+            state.lastPrices[symbol] = newPrice;
+
+            const selectedCoinSymbol = dom.coinSelect.options[dom.coinSelect.selectedIndex]?.dataset.symbol;
+            if(selectedCoinSymbol === symbol) {
+                dom.currentPrice.textContent = getPricePrecision(newPrice);
+                if (isTrackingMarketPrice) { dom.entryPrice.value = getPricePrecision(newPrice); calculateAll(); }
+                if (isUsingSmartPrice) { updateSmartPriceSuggestion(newPrice); calculateAll(); }
+            }
+            updateRealtimePl(newPrice, symbol);
+            checkAutoTradeTrigger(newPrice, symbol);
+            checkPriceAlerts(newPrice, symbol);
+            renderActiveTradesUI();
+        };
+        ws.onerror = (error) => console.error(`WebSocket error for ${symbol}:`, error);
+        ws.onclose = (event) => console.log(`WebSocket for ${symbol} closed:`, event.code, event.reason); 
+        ws.onopen = () => console.log(`WebSocket for ${symbol} opened.`); 
+    }
+
+    async function checkPriceAlerts(price, symbol) {
+        if (state.isAlertModalOpen) return; 
+
+        for (const alertId in state.priceAlerts) {
+            const alert = state.priceAlerts[alertId];
+            if (alert.status !== 'active' || alert.coin.symbol.toLowerCase() !== symbol) continue;
+
+            let isTriggered = false;
+            if (alert.condition === 'gte' && price >= alert.targetPrice) {
+                isTriggered = true;
+            } else if (alert.condition === 'lte' && price <= alert.targetPrice) {
+                isTriggered = true;
+            }
+
+            if (isTriggered) {
+                state.alertToPlan = {
+                    coinId: alert.coin.id,
+                    price: price, 
+                    alertId: alert.id
+                };
+
+                dom.priceAlertModalDetails.innerHTML = `
+                    <span class="font-bold">${alert.coin.symbol.toUpperCase()}</span> has reached your target of ${formatCurrency(alert.targetPrice)}.<br>
+                    <span class="text-sm">Current Price: ${formatCurrency(price)}</span>
+                `;
+                dom.priceAlertModal.classList.remove('hidden');
+                state.isAlertModalOpen = true;
+
+                callSendDiscordNotificationFunction({ ...alert, status: 'Triggered', currentPrice: price });
+                break;
+            }
+        }
+    }
+
+    function checkAutoTradeTrigger(price, symbol) {
+        if (isClosingTrade) return; 
+
+        for (const tradeId in state.activeTrades) {
+            const trade = state.activeTrades[tradeId];
+            if (trade.coin.symbol.toLowerCase() !== symbol) continue;
+
+            let result = null;
+            const tp = typeof trade.tpPrice === 'number' ? trade.tpPrice : 0;
+            const sl = typeof trade.slPrice === 'number' ? trade.slPrice : 0;
+
+            if (trade.direction === 'long' && tp !== 0 && price >= tp) result = 'Auto TP';
+            else if (trade.direction === 'long' && sl !== 0 && price <= sl) result = 'Auto SL';
+            else if (trade.direction === 'short' && tp !== 0 && price <= tp) result = 'Auto TP';
+            else if (trade.direction === 'short' && sl !== 0 && price >= sl) result = 'Auto SL';
+
+            if (result) {
+                console.log(`Trade ${tradeId} triggered: ${result} at price ${price}`); 
+                const isProfit = result.includes('TP');
+                const pnl = isProfit ? trade.profitAmt : -trade.lossAmt;
+                const netPnl = pnl - (trade.estFees || 0);
+                const finalTrade = { ...trade, result, profit: isProfit ? pnl : null, loss: !isProfit ? -pnl : null, netPnl, timestamp: serverTimestamp(), closePrice: price };
+                delete finalTrade.id;
+
+                isClosingTrade = true;
+                saveCompletedTrade(finalTrade, tradeId, trade.isAdvanced).then(() => {
+                    isClosingTrade = false;
+                }).catch(e => {
+                    console.error("Error during auto trade closure:", e); 
+                    isClosingTrade = false; 
+                });
+                return;
+            }
+        }
+    }
+
+    function loadPreset(slot) {
+        selectedPresetSlot = slot;
+        dom.presetSlots.forEach(btn => btn.classList.toggle('active', btn.dataset.slot === slot));
+        const slotData = state.presets[`slot${slot}`];
+        if (slotData) {
+            dom.riskPercentSlider.value = slotData.riskP;
+            state.isSimpleMode = (slotData.isSimpleMode === true);
+            dom.riskPanelModeToggle.checked = state.isSimpleMode;
+
+            if (!state.isVolatilityAdjusterEnabled && !state.isSimpleMode) {
+                dom.stopLossPercentSlider.value = slotData.slP;
+                state.userSetSLPercent = parseFloat(slotData.slP) / 100;
+                state.userHasOverriddenSL = true; 
+            } else if (state.isSimpleMode && state.isIntelligentSystemEnabled) {
+            } else if (state.isVolatilityAdjusterEnabled) {
+            } else {
+                dom.stopLossPercentSlider.value = slotData.slP;
+                state.userSetSLPercent = parseFloat(slotData.slP) / 100;
+                state.userHasOverriddenSL = true;
+            }
+
+
+            dom.leverageSlider.value = slotData.lev;
+            dom.riskRewardRatioSlider.value = slotData.rr;
+        }
+        updateRiskPanelModeUI();
+        calculateAll();
+    }
+
+    function populateCoinSelect() {
+        dom.coinSelect.innerHTML = '<option value="">เลือกเหรียญ...</option>';
+        state.coinsData.forEach(c => {
+            const option = new Option(`<span class="math-inline">\{c\.name\} \(</span>{c.symbol.toUpperCase()})`, c.id);
+            option.dataset.symbol = c.symbol.toLowerCase();
+            dom.coinSelect.add(option);
+        });
+        if (state.coinsData.length > 0) {
+            dom.coinSelect.value = state.coinsData[0].id;
+            handleCoinSelection(state.coinsData[0].id);
+        }
+        populateAlertCoinSelect();
+    }
+
+    function populateAlertCoinSelect() {
+        dom.alertCoinSelect.innerHTML = '<option value="">เลือกเหรียญ...</option>';
+        state.coinsData.forEach(c => {
+            const option = new Option(`<span class="math-inline">\{c\.name\} \(</span>{c.symbol.toUpperCase()})`, c.id);
+            option.dataset.symbol = c.symbol.toLowerCase();
+            dom.alertCoinSelect.add(option);
+        });
+        dom.alertCoinSelect.value = dom.coinSelect.value;
+    }
+
+   function handleCoinSelection(coinId, useSmartPrice = true) {
+        if (!coinId) return;
+        const coin = state.coinsData.find(c => c.id === coinId);
+        if (coin) {
+            isUsingSmartPrice = useSmartPrice; 
+            toggleMarketTracking(false);
+            state.userHasOverriddenSL = false;
+            const symbol = coin.symbol.toLowerCase();
+            manageWebSocket(symbol); 
+            const currentLivePrice = state.lastPrices[symbol] || 0;
+            dom.currentPrice.textContent = getPricePrecision(currentLivePrice);
+            if (isUsingSmartPrice) {
+                updateSmartPriceSuggestion(currentLivePrice);
+            }
+            updateMarketScreener();
+            dom.alertCoinSelect.value = coinId;
+        }
+    }
+
+    function updateSmartPriceSuggestion(price) {
+        if (!price || !isUsingSmartPrice) return;
+        const suggestion = state.currentTradeDirection === 'long' ? price * (1 - SMART_PRICE_OFFSET) : price * (1 + SMART_PRICE_OFFSET);
+        dom.entryPrice.value = getPricePrecision(suggestion);
+    }
+
+    function toggleMarketTracking(isActive) {
+        isTrackingMarketPrice = isActive;
+        dom.useMarketPrice.classList.toggle('active', isActive);
+        dom.useMarketPrice.textContent = isActive ? 'Tracking...' : 'Use Market';
+    }
+
+    function updateRealtimePl(currentPrice, symbol) {
+        for (const tradeId in state.activeTrades) {
+            const trade = state.activeTrades[tradeId];
+            if (trade.coin.symbol.toLowerCase() !== symbol) continue;
+            const plElement = document.getElementById(`realtime-pl-${tradeId}`);
+            if (!plElement) continue;
+
+            const priceChange = currentPrice - trade.entry;
+            const pnlPercentage = (priceChange / trade.entry) * trade.lev; 
+            const pnlAmount = trade.initialMgn * pnlPercentage; 
+            let finalPnl = (trade.direction === 'long') ? pnlAmount : -pnlAmount;
+
+            plElement.textContent = formatCurrency(finalPnl, true);
+            plElement.classList.toggle('text-profit', finalPnl >= 0);
+            plElement.classList.toggle('text-loss', finalPnl < 0);
+
+            plElement.classList.remove('value-pop');
+            void plElement.offsetWidth;
+            plElement.classList.add('value-pop');
+        }
+    }
+
+    function getPricePrecision(value) {
+        if (typeof value !== 'number' || !value) return '...';
+        if (value > 1000) return value.toFixed(2);
+        if (value > 100) return value.toFixed(3);
+        if (value > 1) return value.toFixed(5);
+        return value.toFixed(7);
+    }
+
+    function formatCurrency(value, withSign = false, withSymbol = true) {
+        if (typeof value !== 'number' || isNaN(value)) return withSymbol ? '$0.00' : '0.00';
+        const sign = withSign && value > 0 ? '+' : '';
+        const symbol = withSymbol ? '$' : '';
+        return sign + symbol + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function copyToClipboard(text, event) {
+        if (!text || text === '...') return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        dom.copyTooltip.style.left = `${rect.left + rect.width / 2}px`;
+        dom.copyTooltip.style.top = `${rect.top}px`;
+        dom.copyTooltip.textContent = 'คัดลอก: ' + text;
+        dom.copyTooltip.classList.add('show');
+        setTimeout(() => dom.copyTooltip.classList.remove('show'), 1200);
+        navigator.clipboard.writeText(text).catch(err => console.error('Copy failed', err));
+    }
+
+    async function updateMarketScreener() {
+        dom.marketScreener.classList.remove('screener-favorable', 'screener-caution', 'screener-high-risk', 'screener-disabled');
+
+        if (!state.isIntelligentSystemEnabled) {
+            state.marketScreenerStatus = null;
+            dom.marketScreener.classList.add('screener-disabled');
+            dom.screenerStatusEmoji.textContent = '⚪';
+            dom.screenerStatusText.textContent = 'ระบบอัจฉริยะถูกปิดใช้งาน';
+            dom.screenerStatusText.style.color = 'rgba(235, 235, 245, 0.6)';
+            dom.screenerCurrentStatus.textContent = 'กรุณาเปิด Intelligent Assistant ในหน้า Settings';
+            return;
+        }
+
+        const selectedCoinSymbol = dom.coinSelect.options[dom.coinSelect.selectedIndex]?.dataset.symbol;
+        if (!selectedCoinSymbol) {
+            state.marketScreenerStatus = null;
+            dom.marketScreener.classList.add('screener-disabled');
+            dom.screenerStatusEmoji.textContent = '❓';
+            dom.screenerStatusText.textContent = 'เลือกเหรียญเพื่อวิเคราะห์';
+            dom.screenerCurrentStatus.textContent = '';
+            return;
+        }
+
+        dom.screenerStatusEmoji.textContent = '🔄';
+        dom.screenerStatusText.textContent = 'กำลังวิเคราะห์...';
+        dom.screenerCurrentStatus.textContent = 'กำลังดึงข้อมูลตลาด...';
+        dom.marketScreener.classList.add('screener-disabled');
+
+        try {
+            const klines = await fetchKlines(selectedCoinSymbol.toUpperCase() + 'USDT', KLINES_INTERVAL_1H, KLINES_LIMIT);
+            lastKlinesFetchTime[selectedCoinSymbol] = Date.now();
+
+            const closePrices = klines.map(k => parseFloat(k[4]));
+            const highPrices = klines.map(k => parseFloat(k[2]));
+            const lowPrices = klines.map(k => parseFloat(k[3]));
+
+            const adxValue = calculateADX(highPrices, lowPrices, closePrices, INDICATOR_PERIOD);
+            const atrValue = calculateATR(highPrices, lowPrices, closePrices, INDICATOR_PERIOD);
+            const latestPrice = closePrices[closePrices.length - 1];
+
+            state.marketScreenerATR = atrValue;
+            const conditionResult = determineMarketCondition(adxValue, atrValue, latestPrice);
+            state.marketScreenerStatus = conditionResult;
+
+            const { emoji, text, colorClass, statusColor, message } = conditionResult;
+
+            dom.marketScreener.classList.remove('screener-disabled');
+            dom.marketScreener.classList.add(colorClass);
+            dom.screenerStatusEmoji.textContent = emoji;
+            dom.screenerStatusText.textContent = text;
+            dom.screenerStatusText.style.color = statusColor;
+            dom.screenerCurrentStatus.textContent = message;
+
+        } catch (error) {
+            state.marketScreenerStatus = { condition: 'unknown' };
+            console.error("Error fetching or calculating Market Screener data:", error);
+            dom.marketScreener.classList.remove('screener-disabled');
+            dom.marketScreener.classList.add('screener-high-risk');
+            dom.screenerStatusEmoji.textContent = '❌';
+            dom.screenerStatusText.textContent = 'เกิดข้อผิดพลาด';
+            dom.screenerStatusText.style.color = 'var(--loss-color)';
+            dom.screenerCurrentStatus.textContent = `ไม่สามารถดึงข้อมูลได้: ${error.message || 'Unknown error'}`;
+        } finally {
+            calculateAll();
+        }
+    }
+
+    function updateIntelligentSystemUI() {
+        updateMarketScreener();
+        updateIntelligentAdvisorMessage(null);
+        if (dom.volatilityAdjusterSwitch) {
+            dom.volatilityAdjusterSwitch.checked = state.isVolatilityAdjusterEnabled;
+        }
+        calculateAll();
+    }
+
+    function handleScreenerInfoHover(event) {
+        clearTimeout(infoTooltipHideTimer);
+        if (!state.isIntelligentSystemEnabled) return;
+        const infoContentHtml = dom.screenerUserGuideContent.innerHTML;
+        if (!infoContentHtml) return;
+
+        dom.infoTooltip.style.left = `${event.clientX}px`;
+        dom.infoTooltip.style.top = `${event.clientY}px`;
+        dom.infoTooltip.style.transform = 'translate(-50%, calc(-100% - 15px))';
+        dom.infoTooltip.innerHTML = infoContentHtml;
+        dom.infoTooltip.classList.add('show');
+    }
+
+    function hideInfoTooltip() {
+        infoTooltipHideTimer = setTimeout(() => {
+            dom.infoTooltip.classList.remove('show');
+        }, 100);
+    }
+
+    async function fetchKlines(symbol, interval, limit) {
+        const url = `<span class="math-inline">\{BINANCE\_API\_BASE\_URL\}/klines?symbol\=</span>{symbol}&interval=<span class="math-inline">\{interval\}&limit\=</span>{limit}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+            const errorBody = await response.json();
+            throw new Error(`Binance API Error (${response.status}): ${errorBody.msg || response.statusText}`);
+        }
+        return response.json();
+    }
+
+    function calculateTrueRange(high, low, closePrev) { return Math.max(high - low, Math.abs(high - closePrev), Math.abs(low - closePrev)); }
+    function wildersSmoothing(data, period) {
+        let smoothed = [];
+        if (data.length < period) return [];
+        let sum = 0;
+        for (let i = 0; i < period; i++) { sum += data[i]; }
+        smoothed.push(sum / period);
+        for (let i = period; i < data.length; i++) {
+            smoothed.push((smoothed[smoothed.length - 1] * (period - 1) + data[i]) / period);
+        }
+        return smoothed;
+    }
+
+    function calculateATR(highPrices, lowPrices, closePrices, period) {
+        if (highPrices.length < period + 1) return null;
+        const trueRanges = [];
+        for (let i = 1; i < highPrices.length; i++) { trueRanges.push(calculateTrueRange(highPrices[i], lowPrices[i], closePrices[i - 1])); }
+        const smoothedTR = wildersSmoothing(trueRanges, period);
+        return smoothedTR.length > 0 ? smoothedTR[smoothedTR.length - 1] : null;
+    }
+
+    function calculateADX(highPrices, lowPrices, closePrices, period) {
+        if (highPrices.length < period * 2) return null;
+        let plusDM = [], minusDM = [], tr = [];
+        for (let i = 1; i < highPrices.length; i++) {
+            const highDiff = highPrices[i] - highPrices[i - 1];
+            const lowDiff = lowPrices[i - 1] - lowPrices[i];
+            plusDM.push((highDiff > lowDiff && highDiff > 0) ? highDiff : 0);
+            minusDM.push((lowDiff > highDiff && lowDiff > 0) ? lowDiff : 0);
+            tr.push(calculateTrueRange(highPrices[i], lowPrices[i], closePrices[i - 1]));
+        }
+        const smoothedPlusDM = wildersSmoothing(plusDM, period);
+        const smoothedMinusDM = wildersSmoothing(minusDM, period);
+        const smoothedTR = wildersSmoothing(tr, period);
+        if (smoothedTR.length === 0) return null;
+        let plusDI = [], minusDI = [];
+        for (let i = 0; i < smoothedTR.length; i++) {
+            plusDI.push(smoothedTR[i] === 0 ? 0 : (smoothedPlusDM[i] / smoothedTR[i]) * 100);
+            minusDI.push(smoothedTR[i] === 0 ? 0 : (smoothedMinusDM[i] / smoothedTR[i]) * 100);
+        }
+        let dx = [];
+        for (let i = 0; i < plusDI.length; i++) {
+            const diSum = plusDI[i] + minusDI[i];
+            dx.push(diSum === 0 ? 0 : (Math.abs(plusDI[i] - minusDI[i]) / diSum) * 100);
+        }
+        const adx = wildersSmoothing(dx, period);
+        return adx.length > 0 ? adx[adx.length - 1] : null;
+    }
+
+    function determineMarketCondition(adx, atr, latestPrice) {
+        if (adx === null || atr === null || latestPrice === null || latestPrice === 0) {
+             return { condition: 'unknown', emoji: '❓', text: 'ไม่สามารถวิเคราะห์ได้', colorClass: 'screener-disabled', statusColor: 'gray', message: 'ข้อมูลไม่เพียงพอสำหรับการวิเคราะห์เชิงลึก', };
+        }
+        const atrPercentage = (atr / latestPrice);
+        if (atrPercentage * 100 > ATR_HIGH_VOL_FACTOR_PERCENT || adx < ADX_SIDEWAYS_THRESHOLD) {
+            let msg = (atrPercentage * 100 > ATR_HIGH_VOL_FACTOR_PERCENT) ? `ตลาดมีความผันผวนสูง (ATR: ${(atrPercentage * 100).toFixed(2)}%)` : `ตลาดเป็น Sideways อ่อนแอ (ADX: ${adx.toFixed(2)})`;
+            return { condition: 'high-risk', emoji: '🔴', text: 'สภาวะเสี่ยงสูง', colorClass: 'screener-high-risk', statusColor: 'var(--loss-color)', message: `${msg}. ไม่แนะนำให้เข้าเทรด`, };
+        }
+        if (adx >= ADX_TREND_THRESHOLD) {
+            return { condition: 'favorable', emoji: '🟢', text: 'สภาวะเอื้ออำนวย', colorClass: 'screener-favorable', statusColor: 'var(--profit-color)', message: `ตลาดมีแนวโน้มชัดเจน (ADX: ${adx.toFixed(2)})`, };
+        }
+        if (adx < ADX_TREND_THRESHOLD && adx >= ADX_SIDEWAYS_THRESHOLD) {
+            return { condition: 'caution', emoji: '🟡', text: 'สภาวะต้องระวัง', colorClass: 'screener-caution', statusColor: 'var(--caution-color)', message: `ตลาดเริ่มไม่มีทิศทาง (ADX: ${adx.toFixed(2)})`, };
+        }
+        return { condition: 'unknown', emoji: '❓', text: 'ไม่สามารถวิเคราะห์ได้', colorClass: 'screener-disabled', statusColor: 'gray', message: 'ไม่พบรูปแบบที่ชัดเจน', };
+    }
+
+    function calculateLiquidationPrice(entry, leverage, direction) {
+        if (entry <= 0 || leverage <= 0) return null;
+        return direction === 'long' ? entry * (1 - (1 / leverage)) : entry * (1 + (1 / leverage));
+    }
+
+    function checkLiquidationSafety(entry, slPrice, leverage, direction) {
+        if (entry <= 0 || slPrice <= 0 || leverage <= 0) return true;
+        const liqPrice = calculateLiquidationPrice(entry, leverage, direction);
+        if (liqPrice === null) return true;
+        if (direction === 'long') { return slPrice > liqPrice * (1 + LIQUIDATION_BUFFER_PERCENTAGE); }
+        else { return slPrice < liqPrice * (1 - LIQUIDATION_BUFFER_PERCENTAGE); }
+    }
+
+    function isTradeViable(params) {
+        const { entry, lossAmt, lev, slP, availableBalance, direction } = params;
+        if (lev <= 0 || slP <= 0 || entry <= 0) return 'invalid_params';
+        const initialMgn = lossAmt / (slP * lev);
+        if (initialMgn > availableBalance) return 'margin_issue';
+        const slPrice = (direction === 'long') ? entry * (1 - slP) : entry * (1 + slP);
+        if (!checkLiquidationSafety(entry, slPrice, lev, direction)) return 'liquidation_issue';
+        return 'viable';
+    }
+
+    function updateIntelligentAdvisorMessage(initialReason) {
+        if (state.systemState.mode === 'advanced') { dom.intelligentAdvisorMessage.classList.add('hidden'); return; }
+        dom.applyAdvisorSuggestionBtn.classList.add('hidden');
+        state.advisorSuggestions = { slP: null, lev: null };
+
+        if (!state.isIntelligentSystemEnabled || initialReason === 'viable' || initialReason === null) {
+            dom.intelligentAdvisorMessage.classList.add('hidden'); return;
+        }
+
+        const { entry, lossAmt } = state.tradeCalculations;
+        const { availableBalance, currentTradeDirection: direction } = state;
+        const maxSL = parseFloat(dom.stopLossPercentSlider.max) / 100, maxLev = parseFloat(dom.leverageSlider.max);
+        const minSL = parseFloat(dom.stopLossPercentSlider.min) / 100, minLev = parseFloat(dom.leverageSlider.min);
+        let currentSL = parseFloat(dom.stopLossPercentSlider.value) / 100, currentLev = parseFloat(dom.leverageSlider.value);
+
+        dom.intelligentAdvisorMessage.classList.remove('hidden', 'caution-state');
+        let suggestionsHtml = '';
+
+        if (state.isSimpleMode) {
+            dom.advisorTitle.textContent = `⛔ % Risk สูงเกินไปสำหรับ Simple Mode`;
+            suggestionsHtml = `<li>ใน Simple Mode ระบบจะคำนวณ Stop Loss และ Leverage ที่ปลอดภัยให้โดยอัตโนมัติ แต่ด้วย % Risk และ R:R Ratio ที่ท่านตั้งไว้ ทำให้ไม่สามารถหาค่าที่เหมาะสมและปลอดภัยได้</li>`;
+            dom.advisorNote.innerHTML = `<strong>คำแนะนำ:</strong> กรุณาลอง <strong>"ลด % Risk"</strong> หรือ <strong>"ปรับลด R:R Ratio"</strong> ลง แล้วระบบจะสามารถคำนวณแผนการเทรดให้ใหม่ได้ครับ`;
+            dom.advisorSuggestionsList.innerHTML = suggestionsHtml;
+            dom.advisorSuggestion.classList.remove('hidden');
+            dom.intelligentAdvisorMessage.classList.add('caution-state');
+            return;
+        }
+
+        for (let testSL = currentSL + 0.001; testSL <= maxSL; testSL += 0.001) {
+            if (isTradeViable({ entry, lossAmt, lev: currentLev, slP: testSL, availableBalance, direction }) === 'viable') {
+                suggestionsHtml = `<li>ลองปรับ <strong>Stop Loss</strong> เพิ่มขึ้นเป็น <strong>${(testSL * 100).toFixed(1)}%</strong></li>`;
+                dom.advisorTitle.textContent = `💡 พบทางแก้ไขที่ง่ายที่สุด`;
+                state.advisorSuggestions = { slP: testSL, lev: currentLev };
+                dom.intelligentAdvisorMessage.classList.add('caution-state');
+                break;
+            }
+        }
+        if (!suggestionsHtml) {
+            for (let testLev = currentLev - 1; testLev >= minLev; testLev--) {
+                 if (isTradeViable({ entry, lossAmt, lev: testLev, slP: currentSL, availableBalance, direction }) === 'viable') {
+                    suggestionsHtml = `<li>ลองปรับ <strong>Leverage</strong> ลดลงเหลือ <strong>${testLev}x</strong></li>`;
+                    dom.advisorTitle.textContent = `💡 พบทางแก้ไข`;
+                    state.advisorSuggestions = { slP: currentSL, lev: testLev };
+                    dom.intelligentAdvisorMessage.classList.add('caution-state');
+                    break;
+                }
+            }
+        }
+        if (!suggestionsHtml) {
+            for (let testLev = currentLev - 1; testLev >= minLev; testLev--) {
+                for (let testSL = currentSL + 0.001; testSL <= maxSL; testSL += 0.001) {
+                    if (isTradeViable({ entry, lossAmt, lev: testLev, slP: testSL, availableBalance, direction }) === 'viable') {
+                        suggestionsHtml = `<li>ลองปรับ <strong>Leverage</strong> ลดลงเหลือ <strong>${testLev}x</strong> และ <strong>Stop Loss</strong> เพิ่มขึ้นเป็น <strong>${(testSL * 100).toFixed(1)}%</strong></li>`;
+                        dom.advisorTitle.textContent = `💡 พบทางแก้ไข`;
+                        state.advisorSuggestions = { slP: testSL, lev: testLev };
+                        dom.intelligentAdvisorMessage.classList.add('caution-state');
+                        break;
+                    }
+                }
+                if (suggestionsHtml) break;
+            }
+        }
+
+        if (suggestionsHtml) {
+            dom.advisorSuggestionsList.innerHTML = suggestionsHtml;
+            dom.advisorSuggestion.classList.remove('hidden');
+            dom.applyAdvisorSuggestionBtn.classList.remove('hidden');
+        } else {
+            dom.advisorTitle.textContent = `⛔ ไม่สามารถหาทางแก้ไขได้`;
+            suggestionsHtml = `<li>ภายใต้ % Risk ปัจจุบัน ไม่สามารถปรับค่า SL และ Leverage ให้เทรดนี้มีความปลอดภัยและอยู่ในงบประมาณได้</li>`;
+            dom.advisorNote.innerHTML = `<strong>คำแนะนำที่ดีที่สุด: กรุณาลอง <strong>"ลด % Risk ลง"</strong> ในหน้า Risk Panel ลง</strong> แล้วระบบจะสามารถคำนวณค่าที่เหมาะสมได้อีกครั้งครับ`;
+            dom.advisorSuggestionsList.innerHTML = suggestionsHtml;
+            dom.advisorSuggestion.classList.remove('hidden');
+        }
+    }
+
+    function updateRRFeasibilityGrade() {
+        if (!state.isSimpleMode || !state.isIntelligentSystemEnabled || state.systemState.mode === 'advanced') {
+            dom.rrFeasibilityGrade.classList.add('hidden');
+            return;
+        }
+        dom.rrFeasibilityGrade.classList.remove('hidden');
+        const rrRatio = state.tradeCalculations.rr;
+        const marketCondition = state.marketScreenerStatus?.condition;
+
+        let grade = { emoji: '❓', text: 'รอข้อมูลตลาด...', colorClass: 'text-gray-400' };
+        if(marketCondition){
+            if (rrRatio > 3.0) {
+                if (marketCondition === 'favorable') grade = { emoji: '✅', text: 'เหมาะสม (Good Match)', colorClass: 'text-profit' };
+                else if (marketCondition === 'caution') grade = { emoji: '🟡', text: 'ทะเยอทะยาน (Ambitious)', colorClass: 'text-caution' };
+                else grade = { emoji: '🔴', text: 'เสี่ยงเกินจริง (Unrealistic)', colorClass: 'text-loss' };
+            } else if (rrRatio >= 1.5) {
+                if (marketCondition === 'favorable') grade = { emoji: '✅', text: 'ยอดเยี่ยม (Excellent)', colorClass: 'text-profit' };
+                else if (marketCondition === 'caution') grade = { emoji: '✅', text: 'เหมาะสม (Good Match)', colorClass: 'text-profit' };
+                else grade = { emoji: '🟡', text: 'ทะเยอทะยาน (Ambitious)', colorClass: 'text-caution' };
+            } else {
+                if (marketCondition !== 'high-risk') grade = { emoji: '✅', text: 'สมเหตุสมผล (Reasonable)', colorClass: 'text-profit' };
+                else grade = { emoji: '🟡', text: 'สมเหตุสมผล (แต่ตลาดผันผวน)', colorClass: 'text-caution' };
+            }
+        }
+        dom.rrGradeIcon.textContent = grade.emoji;
+        dom.rrGradeText.textContent = grade.text;
+        dom.rrFeasibilityGrade.className = `rr-grade fade-in ${grade.colorClass}`;
+    }
+
+    function saveLocalSettings() {
+        const settings = {
+            binanceApiKey: dom.binanceApiKey.value,
+            binanceApiSecret: dom.binanceApiSecret.value,
+            discordWebhookUrl: dom.discordWebhookUrl.value,
+            intelligentSystemEnabled: state.isIntelligentSystemEnabled,
+            volatilityAdjusterEnabled: state.isVolatilityAdjusterEnabled,
+            userSetSLPercent: state.userSetSLPercent,
+            isSimpleMode: state.isSimpleMode,
+        };
+        localStorage.setItem(`${teamId}_app_settings`, JSON.stringify(settings));
+        alert('Settings saved locally.');
+    }
+
+    function loadLocalSettings() {
+        const savedSettingsString = localStorage.getItem(`${teamId}_app_settings`);
+        if (savedSettingsString) {
+            const settings = JSON.parse(savedSettingsString);
+            dom.binanceApiKey.value = settings.binanceApiKey || '';
+            dom.binanceApiSecret.value = settings.binanceApiSecret || '';
+            dom.discordWebhookUrl.value = settings.discordWebhookUrl || '';
+            state.isIntelligentSystemEnabled = (settings.intelligentSystemEnabled !== false);
+            state.isVolatilityAdjusterEnabled = (settings.isVolatilityAdjusterEnabled === true);
+            state.userSetSLPercent = settings.userSetSLPercent || 0.01;
+            state.isSimpleMode = (settings.isSimpleMode !== false);
+        }
+        dom.masterSwitch.checked = state.isIntelligentSystemEnabled;
+        if (dom.volatilityAdjusterSwitch) { dom.volatilityAdjusterSwitch.checked = state.isVolatilityAdjusterEnabled; }
+        if (dom.riskPanelModeToggle) { dom.riskPanelModeToggle.checked = state.isSimpleMode; }
+    }
+
+    async function callSendDiscordNotificationFunction(notificationDetails) {
+        const webhookUrl = dom.discordWebhookUrl.value;
+        if (!webhookUrl) return;
+
+        let payload = {
+            username: "Trade App Notifier",
+            avatar_url: "https://i.imgur.com/4M34hi2.png",
+            embeds: []
+        };
+
+        if (notificationDetails.status === 'Closed') {
+            const { coin, direction, result, netPnl, entry, closePrice, systemMode, systemStep } = notificationDetails;
+            const isWin = netPnl >= 0;
+
+            const embed = {
+                title: `Trade Closed: ${coin.symbol.toUpperCase()} ${direction.toUpperCase()}`,
+                color: isWin ? 3198360 : 16729402,
+                fields: [
+                    { name: "Result", value: result, inline: true },
+                    { name: "Net P/L", value: `**${formatCurrency(netPnl, true)}**`, inline: true },
+                    { name: "System", value: `${systemMode} (S${systemStep})`, inline: true },
+                    { name: "Entry Price", value: getPricePrecision(entry), inline: true },
+                    { name: "Close Price", value: getPricePrecision(closePrice), inline: true }
+                ],
+                timestamp: new Date().toISOString()
+            };
+            payload.embeds.push(embed);
+
+        } else if (notificationDetails.status === 'Triggered') {
+            const { coin, condition, targetPrice, currentPrice } = notificationDetails;
+            const conditionText = condition === 'gte' ? '>=' : '<=';
+
+            const embed = {
+                title: `🔔 Price Alert Triggered: ${coin.symbol.toUpperCase()}`,
+                description: `Price has met the condition **${conditionText} ${formatCurrency(targetPrice)}**`,
+                color: 10181046,
+                fields: [
+                    { name: "Target Price", value: formatCurrency(targetPrice), inline: true },
+                    { name: "Trigger Price", value: formatCurrency(currentPrice), inline: true }
+                ],
+                timestamp: new Date().toISOString()
+            };
+            payload.embeds.push(embed);
+        }
+
+        if (payload.embeds.length === 0) return;
+
+        try {
+            const response = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                console.error('Failed to send Discord notification:', response.status, await response.text());
+            }
+        } catch (error) {
+            console.error('Error sending Discord notification:', error);
+        }
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
