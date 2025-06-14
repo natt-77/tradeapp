@@ -2268,17 +2268,32 @@ SL: ${dom.summary.sl.textContent}
             if (trade.coin.symbol.toLowerCase() !== symbol) continue;
             const plElement = document.getElementById(`realtime-pl-${tradeId}`);
             if (!plElement) continue;
-            const priceChange = currentPrice - trade.entry;
-            const pnlPercentage = (priceChange / trade.entry) * 100 * trade.lev;
-            const pnlAmount = trade.initialMgn * (pnlPercentage / 100);
-            let finalPnl = (trade.direction === 'long') ? pnlAmount : -pnlAmount;
+
+        // เพิ่มการตรวจสอบเพื่อป้องกันการหารด้วยศูนย์หรือผลลัพธ์ NaN หาก initialMgn, entry, หรือ leverage เป็น 0
+        // P/L ควรเป็น 0 หากการเทรดถูกตั้งค่าด้วย initial margin, entry price, หรือ leverage ที่เป็น 0
+        if (trade.initialMgn === 0 || trade.entry === 0 || trade.lev === 0) {
+            let finalPnl = 0;
             plElement.textContent = formatCurrency(finalPnl, true);
             plElement.classList.toggle('text-profit', finalPnl >= 0);
             plElement.classList.toggle('text-loss', finalPnl < 0);
-
             plElement.classList.remove('value-pop');
             void plElement.offsetWidth;
             plElement.classList.add('value-pop');
+            continue; // ข้ามการคำนวณเพิ่มเติมสำหรับเทรดนี้
+        }
+
+        const priceChange = currentPrice - trade.entry;
+        const pnlPercentage = (priceChange / trade.entry) * 100 * trade.lev;
+        const pnlAmount = trade.initialMgn * (pnlPercentage / 100);
+        let finalPnl = (trade.direction === 'long') ? pnlAmount : -pnlAmount;
+        plElement.textContent = formatCurrency(finalPnl, true);
+        plElement.classList.toggle('text-profit', finalPnl >= 0);
+        plElement.classList.toggle('text-loss', finalPnl < 0);
+
+        plElement.classList.remove('value-pop');
+        void plElement.offsetWidth;
+        plElement.classList.add('value-pop');
+            
         }
     }
 
