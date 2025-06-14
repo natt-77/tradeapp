@@ -1137,8 +1137,8 @@
         // ใช้ค่า FEE_RATE * 2 โดยตรง เพื่อหลีกเลี่ยงการหารด้วยศูนย์ (trade.initialMgn อาจเป็น 0)
         const effectiveFeeRatio = FEE_RATE * 2;
         const breakEvenPrice = trade.direction === 'long'
-            ? trade.entry * (1 + (trade.fee / trade.initialMgn) + BREAKEVEN_FEE_BUFFER)
-            : trade.entry * (1 - (trade.fee / trade.initialMgn) - BREAKEVEN_FEE_BUFFER);
+            ? trade.entry * (1 + effectiveFeeRatio + BREAKEVEN_FEE_BUFFER)
+            : trade.entry * (1 - effectiveFeeRatio - BREAKEVEN_FEE_BUFFER);
 
         // Ensure the new SL is not worse than current price (e.g., if price spiked past BE)
         let finalSLPrice = breakEvenPrice;
@@ -2118,7 +2118,7 @@ SL: ${dom.summary.sl.textContent}
             updateRealtimePl(newPrice, symbol);
             checkAutoTradeTrigger(newPrice, symbol);
             checkPriceAlerts(newPrice, symbol);
-           renderActiveTradesUI();  NEW: Re-render active trades to update SL->BE button visibility/status
+           renderActiveTradesUI();  //NEW: Re-render active trades to update SL->BE button visibility/status
         };
         ws.onerror = (error) => console.error(`WebSocket error for ${symbol}:`, error);
     }
