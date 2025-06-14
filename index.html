@@ -1134,6 +1134,8 @@
         }
 
         // Calculate Break-even price (Entry Price + Fees)
+        // ใช้ค่า FEE_RATE * 2 โดยตรง เพื่อหลีกเลี่ยงการหารด้วยศูนย์ (trade.initialMgn อาจเป็น 0)
+        const effectiveFeeRatio = FEE_RATE * 2;
         const breakEvenPrice = trade.direction === 'long'
             ? trade.entry * (1 + (trade.fee / trade.initialMgn) + BREAKEVEN_FEE_BUFFER)
             : trade.entry * (1 - (trade.fee / trade.initialMgn) - BREAKEVEN_FEE_BUFFER);
@@ -1156,7 +1158,7 @@
             });
             alert(`Stop Loss ของ ${trade.coin.symbol.toUpperCase()} ถูกเลื่อนไปที่ราคาเท่าทุนแล้ว (${getPricePrecision(finalSLPrice)})`);
             // Re-render active trades to show updated SL
-            //renderActiveTradesUI();
+            renderActiveTradesUI();
         } catch (e) {
             console.error("Failed to move SL to Break-even:", e);
             alert("เกิดข้อผิดพลาดในการเลื่อน SL ไปกันทุน: " + e.message);
@@ -2116,7 +2118,7 @@ SL: ${dom.summary.sl.textContent}
             updateRealtimePl(newPrice, symbol);
             checkAutoTradeTrigger(newPrice, symbol);
             checkPriceAlerts(newPrice, symbol);
-           // renderActiveTradesUI();  NEW: Re-render active trades to update SL->BE button visibility/status
+           renderActiveTradesUI();  NEW: Re-render active trades to update SL->BE button visibility/status
         };
         ws.onerror = (error) => console.error(`WebSocket error for ${symbol}:`, error);
     }
