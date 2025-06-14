@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Trade App - V4.25</title>
+    <title>Personal Trade App - V4.24</title> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
             border-radius: 20px;
         }
         .form-input, .form-select {
@@ -50,40 +50,40 @@
             cursor: not-allowed;
             border-color: rgba(255, 255, 255, 0.05);
         }
-        .slider {
-            -webkit-appearance: none;
-            width: 100%;
+        .slider { 
+            -webkit-appearance: none; 
+            width: 100%; 
             height: 10px;
-            background: var(--slider-track-color);
-            border-radius: 5px;
-            outline: none;
-            transition: opacity .2s;
+            background: var(--slider-track-color); 
+            border-radius: 5px; 
+            outline: none; 
+            transition: opacity .2s; 
         }
         .slider:disabled { opacity: 0.7; }
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
+        .slider::-webkit-slider-thumb { 
+            -webkit-appearance: none; 
+            appearance: none; 
             width: 24px;
             height: 24px;
-            background: var(--slider-thumb-color);
-            cursor: pointer;
-            border-radius: 50%;
-            border: 1px solid rgba(0,0,0,0.2);
+            background: var(--slider-thumb-color); 
+            cursor: pointer; 
+            border-radius: 50%; 
+            border: 1px solid rgba(0,0,0,0.2); 
             box-shadow: 0 2px 6px rgba(0,0,0,0.4);
             transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
         }
         .slider:disabled::-webkit-slider-thumb { cursor: not-allowed; background-color: #8e8e93; }
-        .slider::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
-            background: var(--slider-thumb-color);
-            cursor: pointer;
-            border-radius: 50%;
-            border: 1px solid rgba(0,0,0,0.2);
+        .slider::-moz-range-thumb { 
+            width: 24px; 
+            height: 24px; 
+            background: var(--slider-thumb-color); 
+            cursor: pointer; 
+            border-radius: 50%; 
+            border: 1px solid rgba(0,0,0,0.2); 
             box-shadow: 0 2px 6px rgba(0,0,0,0.4);
             transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
         }
-        .slider::-webkit-slider-thumb:hover, .slider:focus::-webkit-slider-thumb {
+        .slider::-webkit-slider-thumb:hover, .slider:focus::-webkit-slider-thumb { 
             box-shadow: 0 0 0 6px rgba(10, 132, 255, 0.4);
         }
         .slider:focus::-moz-range-thumb {
@@ -93,55 +93,55 @@
         .btn { border-radius: 10px; font-weight: 600; transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
         .btn:active { transform: scale(0.98); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: scale(1); }
-        .btn-primary {
-            background-color: var(--brand-blue);
-            color: white;
-            padding: 12px 20px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 3px 8px rgba(0,0,0,0.3);
+        .btn-primary { 
+            background-color: var(--brand-blue); 
+            color: white; 
+            padding: 12px 20px; 
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 3px 8px rgba(0,0,0,0.3); 
             background-image: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(0,0,0,0.05));
         }
-        .btn-primary:not(:disabled):hover {
-            background-color: #007aff;
+        .btn-primary:not(:disabled):hover { 
+            background-color: #007aff; 
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 5px 12px rgba(0,0,0,0.4);
         }
-        .btn-secondary {
-            background-color: rgba(44, 44, 46, 0.8);
-            color: var(--brand-blue);
-            font-weight: 500;
-            padding: 8px 16px;
+        .btn-secondary { 
+            background-color: rgba(44, 44, 46, 0.8); 
+            color: var(--brand-blue); 
+            font-weight: 500; 
+            padding: 8px 16px; 
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.1);
             background-image: linear-gradient(to bottom, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
         }
-        .btn-secondary:not(:disabled):hover {
-            background-color: rgba(58, 58, 60, 0.9);
+        .btn-secondary:not(:disabled):hover { 
+            background-color: rgba(58, 58, 60, 0.9); 
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.2);
         }
-        .btn-secondary.active { background-color: var(--brand-blue); color: #FFF; background-image: linear-gradient(to right, #0A84FF, #0056b3); }
+        .btn-secondary.active { background-color: var(--brand-blue); color: #FFF; background-image: linear-gradient(to right, #0A84FF, #0056b3); } 
         .preset-slot .saved-dot { width: 6px; height: 6px; background-color: var(--brand-blue); border-radius: 50%; position: absolute; top: 6px; right: 6px; display: none; }
         .preset-slot.has-data .saved-dot { display: block; }
 
         .tab-btn { padding: 8px 16px; color: rgba(255, 255, 255, 0.6); cursor: pointer; transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease; border-bottom: 2px solid transparent; }
-        .tab-btn.active {
+        .tab-btn.active { 
             color: #FFF;
-            font-weight: 600;
+            font-weight: 600; 
             border-bottom-color: transparent;
             background-image: linear-gradient(to right, #0A84FF, #0056b3);
             border-radius: 8px 8px 0 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
-        .direction-btn {
-            background-color: rgba(44, 44, 46, 0.8);
-            color: #FFF;
+        .direction-btn { 
+            background-color: rgba(44, 44, 46, 0.8); 
+            color: #FFF; 
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.1);
             background-image: linear-gradient(to bottom, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
         }
-        .direction-btn.active[data-direction="long"] {
-            background-color: var(--profit-color);
+        .direction-btn.active[data-direction="long"] { 
+            background-color: var(--profit-color); 
             background-image: linear-gradient(to right, #30D158, #229940);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 3px 8px rgba(0,0,0,0.3);
         }
-        .direction-btn.active[data-direction="short"] {
-            background-color: var(--loss-color);
+        .direction-btn.active[data-direction="short"] { 
+            background-color: var(--loss-color); 
             background-image: linear-gradient(to right, #FF453A, #C70020);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 3px 8px rgba(0,0,0,0.3);
         }
@@ -192,7 +192,7 @@
 
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
-        details > summary { display: flex; justify-content="space-between"; align-items: center; cursor: pointer; font-weight: 600; padding: 8px 0; }
+        details > summary { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; padding: 8px 0; }
         details > summary::after { content: '+'; font-size: 1.5em; line-height: 1; font-weight: bold; transition: transform 0.2s ease; }
         details[open] > summary::after { content: '×'; transform: rotate(0deg); }
         .info-icon { cursor: help; }
@@ -202,7 +202,7 @@
         .screener-high-risk { background-color: rgba(255, 69, 58, 0.15); border: 1px solid var(--loss-color); box-shadow: 0 0 15px rgba(255, 69, 58, 0.2); transition: all 0.3s ease; }
         .screener-disabled { background-color: rgba(36, 36, 38, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); color: rgba(235, 235, 245, 0.6); box-shadow: none; transition: all 0.3s ease; }
         .screener-disabled .info-icon { color: rgba(235, 235, 245, 0.4); cursor: default; }
-
+        
         #autoAdjustNotification { border-color: var(--brand-blue); background-color: rgba(10, 132, 255, 0.1); }
         #intelligentAdvisorMessage { background-color: rgba(255, 69, 58, 0.15); border: 1px solid #FF453A; border-radius: 12px; padding: 15px; box-shadow: 0 5px 15px rgba(255, 69, 58, 0.2); transition: all 0.3s ease; }
         #intelligentAdvisorMessage.caution-state { background-color: rgba(255, 214, 10, 0.15); border-color: #FFD60A; box-shadow: 0 5px 15px rgba(255, 214, 10, 0.2); }
@@ -210,10 +210,10 @@
         #intelligentAdvisorMessage .text-yellow-300 { color: #FFD60A; font-weight: 600; }
         #intelligentAdvisorMessage ul { list-style-type: disc; padding-left: 20px; margin-top: 8px; }
         #intelligentAdvisorMessage ul li { margin-bottom: 4px; }
-
+        
         .mode-toggle-switch { position: absolute; top: 15px; right: 15px; z-index: 10; }
         .mode-toggle-switch .switch-label { font-size: 11px; color: rgba(255, 255, 255, 0.5); margin-right: 5px; font-weight: normal; }
-
+        
         .rr-grade { display: flex; align-items: center; font-size: 13px; font-weight: 500; margin-top: 4px; gap: 4px; }
         .rr-grade .grade-icon { font-size: 1.2em; }
         #projectedTp, #projectedSl { font-size: 1.8em; font-weight: 300; }
@@ -224,13 +224,6 @@
             -webkit-appearance: none; -moz-appearance: none; appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238E8E93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
-        }
-        #clearHistoryBtn {
-            background-color: rgba(255, 69, 58, 0.8);
-            color: white;
-        }
-        #clearHistoryBtn:hover {
-            background-color: #FF453A;
         }
     </style>
 </head>
@@ -244,7 +237,7 @@
             <div class="text-center">
                 <i data-lucide="alert-triangle" class="mx-auto h-12 w-12 text-yellow-400"></i>
                 <h2 class="text-2xl font-bold mt-4">ยืนยันการลบ</h2>
-                <p id="deleteConfirmMessage" class="text-gray-400 mt-2">คุณแน่ใจหรือไม่ว่าต้องการลบรายการเทรดนี้? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+                <p class="text-gray-400 mt-2">คุณแน่ใจหรือไม่ว่าต้องการลบรายการเทรดนี้? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
             </div>
             <div class="mt-8 grid grid-cols-2 gap-4">
                 <button id="cancelDelete" class="w-full btn btn-secondary bg-gray-600 text-white">ยกเลิก</button>
@@ -263,7 +256,7 @@
             </div>
         </div>
     </div>
-
+    
     <div id="priceAlertModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
         <div class="card p-8 w-full max-w-sm fade-in">
             <div class="text-center">
@@ -299,7 +292,7 @@
 
     <main id="appContent" class="hidden w-full max-w-7xl mx-auto">
         <header class="w-full mb-6 flex justify-between items-center">
-            <h1 class="text-3xl font-bold">Personal Trade App <span class="text-sm text-gray-400">V4.25</span></h1>
+            <h1 class="text-3xl font-bold">Personal Trade App</h1>
             <div class="text-right">
                 <p class="text-sm text-gray-400">Team ID</p>
                 <p id="displayTeamId" class="font-mono text-lg break-all"></p>
@@ -459,7 +452,7 @@
                                         <div class="copyable-row col-span-2 text-caution"><span>Liq. Price</span><span id="summaryLiqPrice" class="font-mono font-bold text-lg value-to-copy">...</span></div>
                                     </div>
                                 </div>
-
+                                 
                                 <div class="p-4 rounded-lg bg-gray-800/50 border border-brand-blue/30">
                                     <label for="systemModeSelect" class="text-md font-bold text-white mb-2 block">System Mode</label>
                                     <select id="systemModeSelect" class="form-select w-full">
@@ -561,17 +554,6 @@
                                                 <p class="mt-2">เมื่อเปิดใช้งานฟีเจอร์นี้ คุณจะไม่สามารถปรับ Stop Loss % ได้ด้วยตนเอง (ระบบจะควบคุมให้)</p>
                                             </div>
                                         </details>
-                                        <details>
-                                            <summary>Move SL to Break-even (SL->BE)</summary>
-                                            <div class="p-3 text-xs bg-black/20 rounded-b-lg">
-                                                <p>ฟีเจอร์นี้ช่วยให้คุณเลื่อน Stop Loss ของสถานะที่กำลังเป็นกำไร ไปยังราคาเท่าทุนโดยอัตโนมัติ</p>
-                                                <ul class="list-disc pl-4 mt-2">
-                                                    <li>เมื่อสถานะเทรดของคุณอยู่ในกำไร ปุ่ม <strong>[SL->BE]</strong> จะปรากฏขึ้นข้างปุ่มปิด (X) ในรายการ Active Trades</li>
-                                                    <li>การกดปุ่มนี้จะคำนวณราคาเท่าทุน (Entry Price + ค่าธรรมเนียม) และอัปเดต <strong>slPrice</strong> ของเทรดนั้นในฐานข้อมูล</li>
-                                                    <li>หลังจากนี้ เทรดนั้นจะไม่มีความเสี่ยงต่อการขาดทุนอีกต่อไป (Risk-Free)</li>
-                                                </ul>
-                                            </div>
-                                        </details>
                                     </div>
                                 </div>
                                 <div class="pt-4 border-t border-white/10">
@@ -664,12 +646,7 @@
                 </div>
 
                 <div class="pt-6 border-t border-white/10 flex flex-col flex-grow">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold flex items-center"><i data-lucide="history" class="mr-2 h-5 w-5"></i>Trade History</h2>
-                        <button id="clearHistoryBtn" class="btn btn-secondary !text-white !bg-red-600/80 hover:!bg-red-600 py-2 px-4 text-sm" title="Clear All Trade History">
-                            <i data-lucide="trash-2" class="h-4 w-4 mr-1"></i> Clear All
-                        </button>
-                    </div>
+                    <h2 class="text-xl font-bold mb-4 flex items-center"><i data-lucide="history" class="mr-2 h-5 w-5"></i>Trade History</h2>
                     <div id="tradeHistoryContainer" class="flex-grow space-y-3 h-[calc(100vh-500px)] overflow-y-auto pr-2">
                         <div id="emptyState" class="h-full flex flex-col items-center justify-center text-center text-gray-500"><i data-lucide="archive" class="h-20 w-20"></i><p class="mt-4 text-lg">ยังไม่มีรายการเทรด</p><p>รายการเทรดที่บันทึกไว้จะแสดงที่นี่</p></div>
                     </div>
@@ -681,7 +658,7 @@
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, onSnapshot, setDoc, addDoc, updateDoc, deleteDoc, collection, serverTimestamp, writeBatch, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, doc, onSnapshot, setDoc, addDoc, updateDoc, deleteDoc, collection, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     // Firebase services and app state
     let db, auth;
@@ -723,12 +700,10 @@
     let tradeToDelete = null;
     let debounceTimer;
     let infoTooltipHideTimer;
-    let isClearingHistory = false; // NEW: Flag for clearing history
 
     // Constants
     const FEE_RATE = 0.0004;
     const SMART_PRICE_OFFSET = 0.001;
-    const BREAKEVEN_FEE_BUFFER = 0.0002; // Extra buffer for breakeven SL adjustment
     const SYSTEM_1326_MULTIPLIERS = [1, 3, 2, 6];
     const DEFAULT_BALANCE = 10000.00;
     const ADVANCED_SYSTEM_CONFIG = [
@@ -813,7 +788,6 @@
         liveStatsWinRate: document.getElementById('liveStatsWinRate'),
         liveStatsTotal: document.getElementById('liveStatsTotal'),
         deleteConfirmModal: document.getElementById('deleteConfirmModal'),
-        deleteConfirmMessage: document.getElementById('deleteConfirmMessage'), // NEW
         cancelDelete: document.getElementById('cancelDelete'),
         confirmDelete: document.getElementById('confirmDelete'),
         tradeConfirmModal: document.getElementById('tradeConfirmModal'),
@@ -875,7 +849,6 @@
         setPriceAlertBtn: document.getElementById('setPriceAlertBtn'),
         activeAlertsContainer: document.getElementById('activeAlertsContainer'),
         activeAlertsList: document.getElementById('activeAlertsList'),
-        clearHistoryBtn: document.getElementById('clearHistoryBtn'), // NEW
     };
 
     function init() {
@@ -1054,30 +1027,16 @@
             const deleteButton = e.target.closest('.delete-trade-btn');
             if(deleteButton) {
                 tradeToDelete = deleteButton.dataset.tradeId;
-                dom.deleteConfirmMessage.textContent = "คุณแน่ใจหรือไม่ว่าต้องการลบรายการเทรดนี้? การกระทำนี้ไม่สามารถย้อนกลับได้";
                 dom.deleteConfirmModal.classList.remove('hidden');
             }
         });
         dom.cancelDelete.addEventListener('click', () => dom.deleteConfirmModal.classList.add('hidden'));
         dom.confirmDelete.addEventListener('click', () => {
-            if(tradeToDelete === 'all') { // NEW: For clearing all history
-                clearAllTradeHistory();
-            } else if(tradeToDelete) {
-                deleteTradeFromDb(tradeToDelete);
-            }
+            if(tradeToDelete) { deleteTradeFromDb(tradeToDelete); }
             dom.deleteConfirmModal.classList.add('hidden');
             tradeToDelete = null;
         });
-        dom.autoTradeStatusList.addEventListener('click', (e) => { // Modified: Check for SL->BE button
-            const cancelButton = e.target.closest('.cancel-auto-trade-btn');
-            const slToBeButton = e.target.closest('.sl-to-be-btn');
-            if (cancelButton) {
-                handleCloseActiveTrade(e);
-            } else if (slToBeButton) {
-                const tradeId = slToBeButton.dataset.id;
-                handleMoveSLToBreakEven(tradeId);
-            }
-        });
+        dom.autoTradeStatusList.addEventListener('click', handleCloseActiveTrade);
         document.querySelectorAll('.tab-btn').forEach(button => button.addEventListener('click', handleTabClick));
 
         dom.resetBalanceBtn.addEventListener('click', handleResetBalance);
@@ -1101,99 +1060,9 @@
         dom.resetParamsBtn.addEventListener('click', handleResetParameters);
         dom.planFromAlertBtn.addEventListener('click', handlePlanFromAlert);
         dom.dismissAlertBtn.addEventListener('click', handleDismissAlert);
-        dom.clearHistoryBtn.addEventListener('click', () => { // NEW: Clear All History button
-            tradeToDelete = 'all';
-            dom.deleteConfirmMessage.textContent = "คุณแน่ใจหรือไม่ว่าต้องการลบประวัติการเทรดทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้";
-            dom.deleteConfirmModal.classList.remove('hidden');
-        });
+        
     }
-
-    // NEW: Function to handle Move SL to Break-even
-    async function handleMoveSLToBreakEven(tradeId) {
-        if (!teamId || !tradeId) return;
-        const trade = state.activeTrades[tradeId];
-        if (!trade) {
-            console.error("Trade not found for SL->BE:", tradeId);
-            return;
-        }
-
-        const currentPrice = state.lastPrices[trade.coin.symbol.toLowerCase()];
-        if (typeof currentPrice !== 'number') {
-            alert(`ไม่สามารถเลื่อน SL ได้: ไม่พบราคาปัจจุบันสำหรับ ${trade.coin.symbol.toUpperCase()}`);
-            return;
-        }
-
-        // Check if trade is in profit
-        const priceChange = currentPrice - trade.entry;
-        const pnlAmount = trade.initialMgn * ((priceChange / trade.entry) * 100 * trade.lev / 100);
-        const actualPnl = trade.direction === 'long' ? pnlAmount : -pnlAmount;
-
-        if (actualPnl <= 0) {
-            alert("สถานะยังไม่เป็นกำไร ไม่สามารถเลื่อน SL ไปกันทุนได้");
-            return;
-        }
-
-        // Calculate Break-even price (Entry Price + Fees)
-        // ใช้ค่า FEE_RATE * 2 โดยตรง เพื่อหลีกเลี่ยงการหารด้วยศูนย์ (trade.initialMgn อาจเป็น 0)
-        const effectiveFeeRatio = FEE_RATE * 2;
-        const breakEvenPrice = trade.direction === 'long'
-            ? trade.entry * (1 + effectiveFeeRatio + BREAKEVEN_FEE_BUFFER)
-            : trade.entry * (1 - effectiveFeeRatio - BREAKEVEN_FEE_BUFFER);
-
-        // Ensure the new SL is not worse than current price (e.g., if price spiked past BE)
-        let finalSLPrice = breakEvenPrice;
-        if (trade.direction === 'long' && finalSLPrice > currentPrice) {
-            finalSLPrice = currentPrice * (1 - 0.001); // Small buffer below current price
-        } else if (trade.direction === 'short' && finalSLPrice < currentPrice) {
-            finalSLPrice = currentPrice * (1 + 0.001); // Small buffer above current price
-        }
-
-
-        const tradeRef = doc(db, `artifacts/${appId}/public/data/teams/${teamId}/activeTrades/${tradeId}`);
-        try {
-            await updateDoc(tradeRef, {
-                slPrice: finalSLPrice,
-                // Optionally: add a flag to denote SL has been moved to BE
-                slMovedToBe: true
-            });
-            alert(`Stop Loss ของ ${trade.coin.symbol.toUpperCase()} ถูกเลื่อนไปที่ราคาเท่าทุนแล้ว (${getPricePrecision(finalSLPrice)})`);
-            // Re-render active trades to show updated SL
-            renderActiveTradesUI();
-        } catch (e) {
-            console.error("Failed to move SL to Break-even:", e);
-            alert("เกิดข้อผิดพลาดในการเลื่อน SL ไปกันทุน: " + e.message);
-        }
-    }
-
-    // NEW: Function to clear all trade history
-    async function clearAllTradeHistory() {
-        if (!teamId || isClearingHistory) return;
-        isClearingHistory = true;
-
-        const historyCollectionRef = collection(db, `artifacts/${appId}/public/data/teams/${teamId}/tradeHistory`);
-        const q = query(historyCollectionRef);
-        try {
-            const querySnapshot = await getDocs(q);
-            if (querySnapshot.empty) {
-                alert("ไม่มีประวัติการเทรดให้ลบ.");
-                isClearingHistory = false;
-                return;
-            }
-
-            const batch = writeBatch(db);
-            querySnapshot.forEach((doc) => {
-                batch.delete(doc.ref);
-            });
-            await batch.commit();
-            alert("ล้างประวัติการเทรดทั้งหมดเรียบร้อยแล้ว.");
-        } catch (e) {
-            console.error("Failed to clear all trade history:", e);
-            alert("เกิดข้อผิดพลาดในการล้างประวัติการเทรด: " + e.message);
-        } finally {
-            isClearingHistory = false;
-        }
-    }
-
+    
     // NEW HELPER: To programmatically show a tab
     function showTab(tabName) {
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1211,13 +1080,13 @@
     async function handleDismissAlert() {
         if (!state.alertToPlan) return;
         const alertId = state.alertToPlan.alertId;
-
+        
         // Update the alert status in Firestore
         const alertRef = doc(db, `artifacts/${appId}/public/data/teams/${teamId}/priceAlerts/${alertId}`);
         try {
             await updateDoc(alertRef, { status: 'triggered' });
         } catch (e) { console.error("Failed to update alert status:", e); }
-
+        
         // Hide modal and reset state
         dom.priceAlertModal.classList.add('hidden');
         state.isAlertModalOpen = false;
@@ -1238,7 +1107,7 @@
         showTab('execute');
         dom.coinSelect.value = coinId;
         dom.entryPrice.value = getPricePrecision(price);
-
+        
         // Use a slight delay to ensure the new coin selection is processed before calculating
         setTimeout(() => {
             handleCoinSelection(coinId, false); // Pass flag to prevent smart price override
@@ -1293,7 +1162,7 @@
 
         dom.stopLossPercentContainer.classList.toggle('disabled', state.isSimpleMode || state.systemState.mode === 'advanced' || state.isVolatilityAdjusterEnabled);
         dom.leverageContainer.classList.toggle('disabled', state.isSimpleMode || state.systemState.mode === 'advanced');
-
+        
         if (dom.volatilityAdjusterSwitch && dom.volatilityAdjusterContainer) {
             const isDisabled = state.isSimpleMode;
             dom.volatilityAdjusterSwitch.disabled = isDisabled;
@@ -1481,7 +1350,7 @@ SL: ${dom.summary.sl.textContent}
         const currentBalance = parseFloat(dom.portfolioBalance.value.replace(/,/g, '')) || 0;
         const { mode, step, baseRiskUnit } = state.systemState;
         const entry = parseFloat(dom.entryPrice.value) || 0;
-
+        
         let params = {
             riskP: parseFloat(dom.riskPercentSlider.value) / 100,
             slP: parseFloat(dom.stopLossPercentSlider.value) / 100,
@@ -1592,7 +1461,7 @@ SL: ${dom.summary.sl.textContent}
             dom.leverageSlider.value = params.lev;
             state.userHasOverriddenSL = false;
         }
-
+        
         const initialMgn = (params.slP > 0 && params.lev > 0) ? (lossAmt / (params.slP * params.lev)) : 0;
         const profitAmt = lossAmt * params.rr;
         let tpPrice = 0, slPrice = 0, breakEven = 0, estFees = 0;
@@ -1706,7 +1575,7 @@ SL: ${dom.summary.sl.textContent}
     function updateProjectedBalancesUI() {
         const currentBalance = parseFloat(dom.portfolioBalance.value.replace(/,/g, '')) || 0;
         const { profitAmt, lossAmt } = state.tradeCalculations;
-
+        
         dom.projectedTp.textContent = formatCurrency(currentBalance + (profitAmt || 0));
         dom.projectedSl.textContent = formatCurrency(currentBalance - (lossAmt || 0));
 
@@ -1756,12 +1625,12 @@ SL: ${dom.summary.sl.textContent}
         const viability = isTradeViable({ ...state.tradeCalculations, availableBalance: state.availableBalance, direction: state.currentTradeDirection });
         let isDisabled = !isReady || (state.isIntelligentSystemEnabled && viability !== 'viable');
         let advisorReason = state.isIntelligentSystemEnabled ? viability : null;
-
+        
         // Dynamic Button Logic
         const screenerCondition = state.marketScreenerStatus?.condition;
         dom.longButton.classList.remove('btn-caution-glow');
         dom.shortButton.classList.remove('btn-caution-glow');
-
+        
         if (screenerCondition === 'high-risk') {
             isDisabled = true;
             dom.longButton.title = "Trading is not recommended in this market condition.";
@@ -1820,35 +1689,22 @@ SL: ${dom.summary.sl.textContent}
             const el = document.createElement('div');
             el.className = 'flex items-center justify-between p-3 rounded-lg bg-white/5 gap-3';
             const coin = trade.coin || {};
-
-            // Calculate current P&L to determine if SL->BE button should be visible
-            const currentPrice = state.lastPrices[coin.symbol.toLowerCase()] || trade.entry; // Use entry if live price not available
-            const priceChange = currentPrice - trade.entry;
-            const pnlPercentage = (priceChange / trade.entry) * 100 * trade.lev;
-            const pnlAmount = trade.initialMgn * (pnlPercentage / 100);
-            const rawPnl = trade.direction === 'long' ? pnlAmount : -pnlAmount;
-            const isProfit = rawPnl > 0;
-
-            const slToBeButtonHtml = isProfit && !trade.slMovedToBe ?
-                `<button data-id="${tradeId}" class="sl-to-be-btn text-brand-blue hover:text-white p-1 rounded-full hover:bg-brand-blue/10 shrink-0 text-xs font-semibold px-2 py-1">SL->BE</button>` : '';
-
             el.innerHTML = `
-            <div class="flex items-center gap-3 flex-grow">
-                <img src="${coin.iconUrl || coin.image || ''}" alt="${coin.name || coin.symbol || 'Coin'}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='https://via.placeholder.com/32/3a3a3c/ffffff?text=' + (coin.symbol ? coin.symbol.substring(0,2).toUpperCase() : 'CO')">
-                <div>
-                    <p class="font-bold text-sm">${coin.symbol?.toUpperCase()}</p>
-                    <p class="text-xs ${trade.direction === 'long' ? 'text-profit' : 'text-loss'} font-semibold">${trade.direction.toUpperCase()}</p>
+                <div class="flex items-center gap-3 flex-grow">
+                    <img src="${coin.iconUrl}" alt="${coin.name}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='${coin.image}'">
+                    <div>
+                        <p class="font-bold text-sm">${coin.symbol?.toUpperCase()}</p>
+                        <p class="text-xs ${trade.direction === 'long' ? 'text-profit' : 'text-loss'} font-semibold">${trade.direction.toUpperCase()}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="text-xs text-right shrink-0">
-                <p id="realtime-pl-${tradeId}" class="font-mono text-lg mb-1">...</p>
-                <p><span class="text-gray-400">TP: </span><span class="font-mono text-profit">${getPricePrecision(trade.tpPrice)}</span></p>
-                <p><span class="text-gray-400">SL: </span><span class="font-mono text-loss">${getPricePrecision(trade.slPrice)}</span></p>
-            </div>
-            ${slToBeButtonHtml}
-            <button data-id="${tradeId}" class="cancel-auto-trade-btn text-gray-500 hover:text-red-400 p-1 rounded-full hover:bg-red-500/10 shrink-0">
-                <i class="h-5 w-5 pointer-events-none" data-lucide="x-circle"></i>
-            </button>`;
+                <div class="text-xs text-right shrink-0">
+                    <p id="realtime-pl-${tradeId}" class="font-mono text-lg mb-1">...</p>
+                    <p><span class="text-gray-400">TP: </span><span class="font-mono text-profit">${getPricePrecision(trade.tpPrice)}</span></p>
+                    <p><span class="text-gray-400">SL: </span><span class="font-mono text-loss">${getPricePrecision(trade.slPrice)}</span></p>
+                </div>
+                <button data-id="${tradeId}" class="cancel-auto-trade-btn text-gray-500 hover:text-red-400 p-1 rounded-full hover:bg-red-500/10 shrink-0">
+                    <i class="h-5 w-5 pointer-events-none" data-lucide="x-circle"></i>
+                </button>`;
             dom.autoTradeStatusList.appendChild(el);
         }
         lucide.createIcons();
@@ -1857,7 +1713,6 @@ SL: ${dom.summary.sl.textContent}
     function renderTradeHistory(trades) {
         dom.tradeHistoryContainer.innerHTML = '';
         dom.emptyState.classList.toggle('hidden', trades.length === 0);
-        dom.clearHistoryBtn.classList.toggle('hidden', trades.length === 0); // NEW: Hide Clear All button if no history
         trades.forEach(trade => {
             const isProfit = trade.netPnl >= 0;
             const el = document.createElement('div');
@@ -1871,19 +1726,19 @@ SL: ${dom.summary.sl.textContent}
             }
             const coin = trade.coin || {};
             el.innerHTML = `
-            <div class="flex items-center gap-3">
-                <img src="${coin.iconUrl || coin.image || ''}" alt="${coin.name || coin.symbol || 'Coin'}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='https://via.placeholder.com/32/3a3a3c/ffffff?text=' + (coin.symbol ? coin.symbol.substring(0,2).toUpperCase() : 'CO')">
-                <div>
-                    <p class="font-bold text-sm">${coin.name || 'N/A'} <span class="text-xs text-gray-400 font-normal">${coin.symbol?.toUpperCase()}</span>${systemBadge}</p>
-                    <p class="text-xs text-gray-400">${timestamp.toLocaleString('th-TH')}</p>
+                <div class="flex items-center gap-3">
+                    <img src="${coin.iconUrl}" alt="${coin.name}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='${coin.image}'">
+                    <div>
+                        <p class="font-bold text-sm">${coin.name || 'N/A'} <span class="text-xs text-gray-400 font-normal">${coin.symbol?.toUpperCase()}</span>${systemBadge}</p>
+                        <p class="text-xs text-gray-400">${timestamp.toLocaleString('th-TH')}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="text-right flex items-center gap-4">
-                <p class="font-mono text-base ${isProfit ? 'text-profit' : 'text-loss'}">${formatCurrency(trade.netPnl, true)}</p>
-                <button data-trade-id="${trade.id}" class="delete-trade-btn text-gray-600 hover:text-red-400 p-1.5 rounded-full hover:bg-red-500/10 transition-colors">
-                    <i data-lucide="trash-2" class="h-4 w-4 pointer-events-none"></i>
-                </button>
-            </div>`;
+                <div class="text-right flex items-center gap-4">
+                    <p class="font-mono text-base ${isProfit ? 'text-profit' : 'text-loss'}">${formatCurrency(trade.netPnl, true)}</p>
+                    <button data-trade-id="${trade.id}" class="delete-trade-btn text-gray-600 hover:text-red-400 p-1.5 rounded-full hover:bg-red-500/10 transition-colors">
+                        <i data-lucide="trash-2" class="h-4 w-4 pointer-events-none"></i>
+                    </button>
+                </div>`;
             dom.tradeHistoryContainer.appendChild(el);
         });
         lucide.createIcons();
@@ -1892,7 +1747,7 @@ SL: ${dom.summary.sl.textContent}
     function renderActiveAlerts(alerts) {
         dom.activeAlertsList.innerHTML = '';
         const activeAlerts = Object.values(alerts).filter(alert => alert.status === 'active');
-
+        
         dom.activeAlertsContainer.classList.toggle('hidden', activeAlerts.length === 0);
 
         if (activeAlerts.length === 0) {
@@ -1977,8 +1832,7 @@ SL: ${dom.summary.sl.textContent}
         const tradeToSave = {
             ...state.tradeCalculations, direction: state.currentTradeDirection, coin: coinInfo,
             timestamp: serverTimestamp(), systemMode: state.systemState.mode, systemStep: state.systemState.step,
-            isAdvanced: (state.systemState.mode === 'advanced'),
-            slMovedToBe: false // NEW: Initialize SL->BE status
+            isAdvanced: (state.systemState.mode === 'advanced')
         };
         const activeTradesCollection = collection(db, `artifacts/${appId}/public/data/teams/${teamId}/activeTrades`);
         try { await addDoc(activeTradesCollection, tradeToSave); } catch(e) { console.error("Failed to arm auto-trade:", e); }
@@ -1995,7 +1849,7 @@ SL: ${dom.summary.sl.textContent}
         }
         const coinInfo = state.coinsData.find(c => c.id === coinId);
         if (!coinInfo) { alert("ไม่พบข้อมูลเหรียญที่เลือก."); return; }
-
+        
         const newAlert = {
             coin: coinInfo, targetPrice: targetPrice, condition: condition,
             status: 'active', createdAt: serverTimestamp(), createdBy: auth.currentUser.uid,
@@ -2028,7 +1882,7 @@ SL: ${dom.summary.sl.textContent}
             const maxSteps = SYSTEM_1326_MULTIPLIERS.length;
             nextSystemState.step = isWin ? (state.systemState.step < maxSteps ? state.systemState.step + 1 : 1) : 1;
         } else if (tradeData.systemMode === 'advanced') {
-            if (!isWin || forceReset) { nextSystemState.step = 1; }
+            if (!isWin || forceReset) { nextSystemState.step = 1; } 
             else { nextSystemState.step = state.systemState.step < ADVANCED_SYSTEM_CONFIG.length ? state.systemState.step + 1 : 1; }
         }
 
@@ -2118,11 +1972,10 @@ SL: ${dom.summary.sl.textContent}
             updateRealtimePl(newPrice, symbol);
             checkAutoTradeTrigger(newPrice, symbol);
             checkPriceAlerts(newPrice, symbol);
-           renderActiveTradesUI();  //NEW: Re-render active trades to update SL->BE button visibility/status
         };
         ws.onerror = (error) => console.error(`WebSocket error for ${symbol}:`, error);
     }
-
+    
     async function checkPriceAlerts(price, symbol) {
         if (state.isAlertModalOpen) return; // Don't trigger new alerts if one is already open
 
@@ -2144,7 +1997,7 @@ SL: ${dom.summary.sl.textContent}
                     price: price, // Use the actual trigger price
                     alertId: alert.id
                 };
-
+                
                 // Populate and show the modal
                 dom.priceAlertModalDetails.innerHTML = `
                     <span class="font-bold">${alert.coin.symbol.toUpperCase()}</span> has reached your target of ${formatCurrency(alert.targetPrice)}.<br>
@@ -2155,10 +2008,10 @@ SL: ${dom.summary.sl.textContent}
 
                 // Send Discord notification
                 callSendDiscordNotificationFunction({ ...alert, status: 'Triggered', currentPrice: price });
-
+                
                 // IMPORTANT: We stop checking for other alerts and do not update the DB here.
                 // The user's interaction with the modal will handle the DB update.
-                break;
+                break; 
             }
         }
     }
@@ -2268,42 +2121,25 @@ SL: ${dom.summary.sl.textContent}
             if (trade.coin.symbol.toLowerCase() !== symbol) continue;
             const plElement = document.getElementById(`realtime-pl-${tradeId}`);
             if (!plElement) continue;
-
-       // เพิ่มการตรวจสอบเพื่อป้องกันการหารด้วยศูนย์หรือผลลัพธ์ NaN หาก initialMgn, entry, หรือ leverage เป็น 0
-        // P/L ควรเป็น 0 หากการเทรดถูกตั้งค่าด้วย initial margin, entry price, leverage เป็น 0 หรือ NaN
-        if (isNaN(trade.initialMgn) || isNaN(trade.entry) || isNaN(trade.lev) ||
-            trade.initialMgn === 0 || trade.entry === 0 || trade.lev === 0) {
-            let finalPnl = 0;
+            const priceChange = currentPrice - trade.entry;
+            const pnlPercentage = (priceChange / trade.entry) * 100 * trade.lev;
+            const pnlAmount = trade.initialMgn * (pnlPercentage / 100);
+            let finalPnl = (trade.direction === 'long') ? pnlAmount : -pnlAmount;
             plElement.textContent = formatCurrency(finalPnl, true);
             plElement.classList.toggle('text-profit', finalPnl >= 0);
             plElement.classList.toggle('text-loss', finalPnl < 0);
+            
             plElement.classList.remove('value-pop');
             void plElement.offsetWidth;
             plElement.classList.add('value-pop');
-            continue; // ข้ามการคำนวณเพิ่มเติมสำหรับเทรดนี้
-        }
-
-        const priceChange = currentPrice - trade.entry;
-        const pnlPercentage = (priceChange / trade.entry) * 100 * trade.lev;
-        const pnlAmount = trade.initialMgn * (pnlPercentage / 100);
-        let finalPnl = (trade.direction === 'long') ? pnlAmount : -pnlAmount;
-        plElement.textContent = formatCurrency(finalPnl, true);
-        plElement.classList.toggle('text-profit', finalPnl >= 0);
-        plElement.classList.toggle('text-loss', finalPnl < 0);
-
-        plElement.classList.remove('value-pop');
-        void plElement.offsetWidth;
-        plElement.classList.add('value-pop');
-            
         }
     }
 
     function getPricePrecision(value) {
         if (typeof value !== 'number' || !value) return '...';
-        if (value > 1000) return value.toFixed(2); // Increased precision for larger numbers
-        if (value > 100) return value.toFixed(3);
-        if (value > 1) return value.toFixed(5);
-        return value.toFixed(7); // Even more precision for very small values
+        if (value > 100) return value.toFixed(2);
+        if (value > 1) return value.toFixed(4);
+        return value.toFixed(6);
     }
 
     function formatCurrency(value, withSign = false, withSymbol = true) {
@@ -2505,7 +2341,7 @@ SL: ${dom.summary.sl.textContent}
         if (entry <= 0 || slPrice <= 0 || leverage <= 0) return true;
         const liqPrice = calculateLiquidationPrice(entry, leverage, direction);
         if (liqPrice === null) return true;
-        if (direction === 'long') { return slPrice > liqPrice * (1 + LIQUIDATION_BUFFER_PERCENTAGE); }
+        if (direction === 'long') { return slPrice > liqPrice * (1 + LIQUIDATION_BUFFER_PERCENTAGE); } 
         else { return slPrice < liqPrice * (1 - LIQUIDATION_BUFFER_PERCENTAGE); }
     }
 
@@ -2581,7 +2417,7 @@ SL: ${dom.summary.sl.textContent}
                 if (suggestionsHtml) break;
             }
         }
-
+        
         if (suggestionsHtml) {
             dom.advisorSuggestionsList.innerHTML = suggestionsHtml;
             dom.advisorSuggestion.classList.remove('hidden');
@@ -2664,11 +2500,11 @@ SL: ${dom.summary.sl.textContent}
             avatar_url: "https://i.imgur.com/4M34hi2.png",
             embeds: []
         };
-
+        
         if (notificationDetails.status === 'Closed') {
             const { coin, direction, result, netPnl, entry, closePrice, systemMode, systemStep } = notificationDetails;
             const isWin = netPnl >= 0;
-
+            
             const embed = {
                 title: `Trade Closed: ${coin.symbol.toUpperCase()} ${direction.toUpperCase()}`,
                 color: isWin ? 3198360 : 16729402,
