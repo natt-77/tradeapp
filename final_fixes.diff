@@ -1,0 +1,33 @@
+--- a/index.html
++++ b/index.html
+@@ -763,7 +763,7 @@
+             const el = document.createElement('div');
+             el.className = 'flex items-center justify-between p-3 rounded-lg bg-white/5 gap-3';
+             const coin = trade.coin || {};
+-
++ 
+             // Calculate current P&L to determine if SL->BE button should be visible
+             const currentPrice = state.lastPrices[coin.symbol.toLowerCase()] || trade.entry; // Use entry if live price not available
+             const priceChange = currentPrice - trade.entry;
+@@ -775,7 +775,7 @@
+                 `<button data-id="${tradeId}" class="sl-to-be-btn text-brand-blue hover:text-white p-1 rounded-full hover:bg-brand-blue/10 shrink-0 text-xs font-semibold px-2 py-1">SL->BE</button>` : '';
+ 
+             el.innerHTML = `
+-            <div class="flex items-center gap-3 flex-grow">
+-                <img src="${coin.iconUrl || coin.image || ''}" alt="${coin.name || coin.symbol || 'Coin'}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='https://via.placeholder.com/32/3a3a3c/ffffff?text=' + (coin.symbol ? coin.symbol.substring(0,2).toUpperCase() : 'CO')">
++            <div class="flex items-center gap-3 flex-grow">
++                <img src="${coin.iconUrl || coin.image || ''}" alt="${coin.name || coin.symbol || 'Coin'}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='https://via.placeholder.com/32/3a3a3c/ffffff?text=CO'">
+                 <div>
+                     <p class="font-bold text-sm">${coin.symbol?.toUpperCase()}</p>
+                     <p class="text-xs ${trade.direction === 'long' ? 'text-profit' : 'text-loss'} font-semibold">${trade.direction.toUpperCase()}</p>
+@@ -800,7 +800,7 @@
+             }
+             const coin = trade.coin || {};
+             el.innerHTML = `
+-            <div class="flex items-center gap-3">
+-                <img src="${coin.iconUrl || coin.image || ''}" alt="${coin.name || 'N/A'}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='https://via.placeholder.com/32/3a3a3c/ffffff?text=' + (coin.symbol ? coin.symbol.substring(0,2).toUpperCase() : 'CO')">
++            <div class="flex items-center gap-3">
++                <img src="${coin.iconUrl || coin.image || ''}" alt="${coin.name || 'N/A'}" class="w-8 h-8 rounded-full bg-gray-700" onerror="this.onerror=null;this.src='https://via.placeholder.com/32/3a3a3c/ffffff?text=CO'">
+                 <div>
+                     <p class="font-bold text-sm">${coin.name || 'N/A'} <span class="text-xs text-gray-400 font-normal">${coin.symbol?.toUpperCase()}</span>${systemBadge}</p>
+                     <p class="text-xs text-gray-400">${timestamp.toLocaleString('th-TH')}</p>
